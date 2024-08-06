@@ -11,6 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="LangChain.Core" />
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.Redis"/>
         <PackageReference Include="StackExchange.Redis"/>
     </ItemGroup>

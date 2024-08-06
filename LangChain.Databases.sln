@@ -20,14 +20,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\auto-format.yml = .github\workflows\auto-format.yml
 		.github\workflows\auto-labeling.yml = .github\workflows\auto-labeling.yml
 		.github\workflows\auto-merge.yml = .github\workflows\auto-merge.yml
-		.github\workflows\deep-infra.yml = .github\workflows\deep-infra.yml
 		.github\dependabot.yml = .github\dependabot.yml
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
-		.github\workflows\github-releases-to-discord.yml = .github\workflows\github-releases-to-discord.yml
 		.github\workflows\mkdocs.yml = .github\workflows\mkdocs.yml
-		.github\workflows\open-router.yml = .github\workflows\open-router.yml
 		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
-		.github\workflows\together.yml = .github\workflows\together.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Weaviate", "Weaviate", "{94377C99-AB51-451D-B51E-B567A489C540}"

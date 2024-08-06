@@ -38,6 +38,8 @@
     <PackageVersion Include="LangChain.Core" Version="0.15.0" />
     <PackageVersion Include="LangChain.DocumentLoaders.Pdf" Version="0.15.0" />
     <PackageVersion Include="LangChain.Polyfills" Version="0.15.0" />
+    <PackageVersion Include="LangChain.Providers.Amazon.Bedrock" Version="0.15.1-dev.76" />
+    <PackageVersion Include="LangChain.Serve.Abstractions" Version="0.15.1-dev.76" />
     <PackageVersion Include="LeonardoAi" Version="0.1.0" />
     <PackageVersion Include="LLamaSharp" Version="0.14.0" />
     <PackageVersion Include="LLamaSharp.Backend.Cpu" Version="0.15.0" />
