@@ -22,7 +22,7 @@ namespace LangChain.Databases.IntegrationTests;
 
 public partial class DatabaseTests
 {
-    private static async Task<DatabaseTestEnvironment> StartEnvironmentForAsync(SupportedDatabase database, CancellationToken cancellationToken = default)
+    internal static async Task<DatabaseTestEnvironment> StartEnvironmentForAsync(SupportedDatabase database, CancellationToken cancellationToken = default)
     {
         switch (database)
         {

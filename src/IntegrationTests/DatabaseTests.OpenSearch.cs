@@ -8,13 +8,13 @@ using static LangChain.Chains.Chain;
 
 namespace LangChain.Databases.IntegrationTests;
 
-public partial class DatabaseTests
+public partial class OpenSearchTests
 {
     #region Query Images
 
     private static async Task<DatabaseTestEnvironment> SetupImageTestsAsync()
     {
-        var environment = await StartEnvironmentForAsync(SupportedDatabase.OpenSearch);
+        var environment = await DatabaseTests.StartEnvironmentForAsync(SupportedDatabase.OpenSearch);
         environment.Dimensions = 1024;
         environment.EmbeddingModel = new TitanEmbedImageV1Model(new BedrockProvider())
         {
@@ -126,7 +126,7 @@ Helpful Answer:";
 
     private static async Task<DatabaseTestEnvironment> SetupDocumentTestsAsync()
     {
-        var environment = await StartEnvironmentForAsync(SupportedDatabase.OpenSearch);
+        var environment = await DatabaseTests.StartEnvironmentForAsync(SupportedDatabase.OpenSearch);
         environment.Dimensions = 1536;
         environment.EmbeddingModel = new TitanEmbedTextV1Model(new BedrockProvider())
         {
