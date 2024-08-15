@@ -16,7 +16,7 @@
     <PackageVersion Include="LangChain.DocumentLoaders.Pdf" Version="0.15.0" />
     <PackageVersion Include="LangChain.Polyfills" Version="0.15.0" />
     <PackageVersion Include="LangChain.Providers.Amazon.Bedrock" Version="0.15.1-dev.78" />
-    <PackageVersion Include="LangChain.Serve.Abstractions" Version="0.15.1-dev.79" />
+    <PackageVersion Include="LangChain.Serve.Abstractions" Version="0.15.1-dev.86" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="8.0.8" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
