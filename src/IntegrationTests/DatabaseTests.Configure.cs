@@ -153,7 +153,7 @@ public partial class DatabaseTests
             case SupportedDatabase.Milvus:
                 {
                     var container = new MilvusBuilder().Build();
-                    
+
                     await container.StartAsync(cancellationToken);
                     // var network = new NetworkBuilder()
                     //     .WithName("milvus-network")
@@ -219,11 +219,11 @@ public partial class DatabaseTests
                         .WithEnvironment("AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED", "true")
                         .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
                         .Build();
-                    
+
                     await container.StartAsync(cancellationToken);
-                    
+
                     await Task.Delay(5000, cancellationToken);
-                    
+
                     return new DatabaseTestEnvironment
                     {
                         VectorDatabase = new WeaviateVectorDatabase(new WeaviateMemoryStore($"http://localhost:{port1}")),
