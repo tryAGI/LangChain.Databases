@@ -28,6 +28,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.Chroma" />
+        <PackageReference Include="Microsoft.SemanticKernel.Core" />
     </ItemGroup>
 
     <ItemGroup>

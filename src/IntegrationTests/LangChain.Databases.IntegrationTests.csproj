@@ -27,6 +27,7 @@
 
     <ItemGroup>
       <PackageReference Include="LangChain.Providers.Amazon.Bedrock" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
       <PackageReference Include="Testcontainers" />
       <PackageReference Include="Testcontainers.Elasticsearch" />
       <PackageReference Include="Testcontainers.Milvus" />

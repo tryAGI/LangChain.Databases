@@ -16,6 +16,7 @@
         <PackageReference Include="Microsoft.Data.Sqlite.Core" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.Sqlite" />
+        <PackageReference Include="Microsoft.SemanticKernel.Core" />
     </ItemGroup>
 
     <ItemGroup>
