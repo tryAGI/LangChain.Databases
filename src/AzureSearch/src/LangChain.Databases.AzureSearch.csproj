@@ -11,8 +11,6 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureAISearch" />
-        <PackageReference Include="Microsoft.SemanticKernel.Core" />
-        <PackageReference Include="System.Memory.Data" />
     </ItemGroup>
 
 </Project>

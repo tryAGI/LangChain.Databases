@@ -11,9 +11,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Pinecone" />
-        <PackageReference Include="Microsoft.SemanticKernel.Core" />
-        <ProjectReference Include="..\..\SemanticKernel\src\LangChain.Databases.SemanticKernel.csproj" />
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Pinecone"/>
+        <ProjectReference Include="..\..\SemanticKernel\src\LangChain.Databases.SemanticKernel.csproj"/>
     </ItemGroup>
 
 </Project>
