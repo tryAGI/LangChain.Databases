@@ -12,12 +12,13 @@
 
     <ItemGroup>
         <PackageReference Include="LangChain.Core" />
-        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Redis"/>
-        <PackageReference Include="StackExchange.Redis"/>
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Redis" />
+        <PackageReference Include="Microsoft.SemanticKernel.Core" />
+        <PackageReference Include="StackExchange.Redis" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\SemanticKernel\src\LangChain.Databases.SemanticKernel.csproj"/>
+        <ProjectReference Include="..\..\SemanticKernel\src\LangChain.Databases.SemanticKernel.csproj" />
     </ItemGroup>
 
 </Project>
