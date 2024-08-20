@@ -12,6 +12,7 @@
 
     <ItemGroup>
         <PackageReference Include="Elastic.Clients.Elasticsearch" />
+        <PackageReference Include="System.Text.Json" />
     </ItemGroup>
 
     <ItemGroup>
