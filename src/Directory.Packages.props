@@ -3,7 +3,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AWSSDK.Kendra" Version="3.7.400.8" />
+    <PackageVersion Include="AWSSDK.Kendra" Version="3.7.400.9" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.4" />
     <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.14.2" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
@@ -16,10 +16,10 @@
     <PackageVersion Include="LangChain.DocumentLoaders.Pdf" Version="0.15.0" />
     <PackageVersion Include="LangChain.Polyfills" Version="0.15.0" />
     <PackageVersion Include="LangChain.Providers.Amazon.Bedrock" Version="0.15.1-dev.78" />
-    <PackageVersion Include="LangChain.Serve.Abstractions" Version="0.15.1-dev.90" />
+    <PackageVersion Include="LangChain.Serve.Abstractions" Version="0.15.1-dev.98" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="8.0.8" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.0" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Milvus" Version="1.16.2-alpha" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.10.0" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.AzureAISearch" Version="1.15.1-alpha" />
