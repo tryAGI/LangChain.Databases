@@ -3,7 +3,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AWSSDK.Kendra" Version="3.7.400.9" />
+    <PackageVersion Include="AWSSDK.Kendra" Version="3.7.400.10" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.4" />
     <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.14.2" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
@@ -16,7 +16,7 @@
     <PackageVersion Include="LangChain.DocumentLoaders.Pdf" Version="0.15.0" />
     <PackageVersion Include="LangChain.Polyfills" Version="0.15.0" />
     <PackageVersion Include="LangChain.Providers.Amazon.Bedrock" Version="0.15.1-dev.78" />
-    <PackageVersion Include="LangChain.Serve.Abstractions" Version="0.15.1-dev.98" />
+    <PackageVersion Include="LangChain.Serve.Abstractions" Version="0.15.1-dev.100" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="8.0.8" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.0" />
@@ -31,7 +31,7 @@
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Redis" Version="1.16.2-alpha" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Sqlite" Version="1.15.1-alpha" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Weaviate" Version="1.16.2-alpha" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Core" Version="1.17.1" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Core" Version="1.17.2" />
     <PackageVersion Include="Moq" Version="4.20.70" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.5.1" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.5.1" />
