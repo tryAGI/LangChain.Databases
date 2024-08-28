@@ -25,16 +25,20 @@ public class PostgresDbClient
     /// </summary>
     /// <param name="connectionString">connection string</param>
     /// <param name="schema">schema name</param>
-    public PostgresDbClient(string connectionString, string schema)
+    public PostgresDbClient(string connectionString, string schema, bool omitExtensionCreation = false)
     {
         var dataSource = new NpgsqlDataSourceBuilder(connectionString).Build();
         var connection = dataSource.OpenConnection();
-        using (connection)
-        {
-            var command = connection.CreateCommand();
-            command.CommandText = "CREATE EXTENSION IF NOT EXISTS vector";
 
-            command.ExecuteNonQuery();
+        if (!omitExtensionCreation)
+        {
+            using (connection)
+            {
+                var command = connection.CreateCommand();
+                command.CommandText = "CREATE EXTENSION IF NOT EXISTS vector";
+    
+                command.ExecuteNonQuery();
+            }
         }
 
         var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
