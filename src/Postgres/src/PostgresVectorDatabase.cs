@@ -12,7 +12,7 @@ namespace LangChain.Databases.Postgres;
 [RequiresUnreferencedCode("Requires unreferenced code.")]
 public class PostgresVectorDatabase(
     string connectionString,
-    string schema = PostgresVectorDatabase.DefaultSchema
+    string schema = PostgresVectorDatabase.DefaultSchema,
     bool omitExtensionCreation = false)
     : IVectorDatabase
 {
