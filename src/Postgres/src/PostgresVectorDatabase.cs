@@ -12,12 +12,13 @@ namespace LangChain.Databases.Postgres;
 [RequiresUnreferencedCode("Requires unreferenced code.")]
 public class PostgresVectorDatabase(
     string connectionString,
-    string schema = PostgresVectorDatabase.DefaultSchema)
+    string schema = PostgresVectorDatabase.DefaultSchema
+    bool omitExtensionCreation = false)
     : IVectorDatabase
 {
     private const string DefaultSchema = "public";
 
-    private readonly PostgresDbClient _client = new(connectionString, schema);
+    private readonly PostgresDbClient _client = new(connectionString, schema, omitExtensionCreation);
 
     /// <inheritdoc />
     public async Task<IVectorCollection> GetCollectionAsync(string collectionName, CancellationToken cancellationToken = default)
