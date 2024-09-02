@@ -36,7 +36,7 @@ public class PostgresDbClient
             {
                 var command = connection.CreateCommand();
                 command.CommandText = "CREATE EXTENSION IF NOT EXISTS vector";
-    
+
                 command.ExecuteNonQuery();
             }
         }
