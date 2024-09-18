@@ -18,7 +18,7 @@ public class Vector
     /// <summary>
     /// 
     /// </summary>
-    public IReadOnlyDictionary<string, object>? Metadata { get; set; }
+    public IDictionary<string, object>? Metadata { get; set; }
 
     /// <summary>
     /// 

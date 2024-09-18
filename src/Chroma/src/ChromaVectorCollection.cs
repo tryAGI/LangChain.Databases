@@ -156,20 +156,20 @@ public class ChromaVectorCollection(
         throw new NotImplementedException();
     }
 
-    private static string SerializeMetadata(IReadOnlyDictionary<string, object> metadata)
+    private static string SerializeMetadata(IDictionary<string, object> metadata)
     {
-        return JsonSerializer.Serialize(metadata, SourceGenerationContext.Default.IReadOnlyDictionaryStringObject);
+        return JsonSerializer.Serialize(metadata, SourceGenerationContext.Default.IDictionaryStringObject);
     }
 
-    private static IReadOnlyDictionary<string, object> DeserializeMetadata(MemoryRecordMetadata metadata)
+    private static IDictionary<string, object> DeserializeMetadata(MemoryRecordMetadata metadata)
     {
-        return JsonSerializer.Deserialize(metadata.AdditionalMetadata, SourceGenerationContext.Default.IReadOnlyDictionaryStringObject)
+        return JsonSerializer.Deserialize(metadata.AdditionalMetadata, SourceGenerationContext.Default.IDictionaryStringObject)
                ?? new Dictionary<string, object>();
     }
 }
 
 [JsonSourceGenerationOptions(Converters = [typeof(ObjectAsPrimitiveConverter)])]
-[JsonSerializable(typeof(IReadOnlyDictionary<string, object>))]
+[JsonSerializable(typeof(IDictionary<string, object>))]
 [JsonSerializable(typeof(double))]
 [JsonSerializable(typeof(float))]
 [JsonSerializable(typeof(int))]

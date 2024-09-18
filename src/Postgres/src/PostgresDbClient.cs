@@ -25,6 +25,7 @@ public class PostgresDbClient
     /// </summary>
     /// <param name="connectionString">connection string</param>
     /// <param name="schema">schema name</param>
+    /// <param name="omitExtensionCreation"></param>
     public PostgresDbClient(string connectionString, string schema, bool omitExtensionCreation = false)
     {
         var dataSource = new NpgsqlDataSourceBuilder(connectionString).Build();

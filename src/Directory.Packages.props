@@ -12,9 +12,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
-    <PackageVersion Include="LangChain.Core" Version="0.15.0" />
-    <PackageVersion Include="LangChain.DocumentLoaders.Pdf" Version="0.15.0" />
-    <PackageVersion Include="LangChain.Polyfills" Version="0.15.0" />
+    <PackageVersion Include="LangChain.Core" Version="0.15.1-dev.129" />
+    <PackageVersion Include="LangChain.DocumentLoaders.Pdf" Version="0.15.1-dev.129" />
+    <PackageVersion Include="LangChain.Polyfills" Version="0.15.1-dev.129" />
     <PackageVersion Include="LangChain.Providers.Amazon.Bedrock" Version="0.15.2" />
     <PackageVersion Include="LangChain.Serve.Abstractions" Version="0.15.1-dev.129" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />

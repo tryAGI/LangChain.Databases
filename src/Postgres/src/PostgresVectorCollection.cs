@@ -25,7 +25,7 @@ public class PostgresVectorCollection(
                 tableName: Name,
                 id: item.Id,
                 content: item.Text,
-                metadata: item.Metadata,
+                metadata: item.Metadata?.ToDictionary(x => x.Key, x => x.Value),
                 embedding: item.Embedding,
                 timestamp: DateTime.UtcNow,
                 cancellationToken: cancellationToken

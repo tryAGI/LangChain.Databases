@@ -26,7 +26,7 @@ LangChain.Databases.Vector.Embedding.get -> float[]?
 LangChain.Databases.Vector.Embedding.set -> void
 LangChain.Databases.Vector.Id.get -> string!
 LangChain.Databases.Vector.Id.set -> void
-LangChain.Databases.Vector.Metadata.get -> System.Collections.Generic.IReadOnlyDictionary<string!, object!>?
+LangChain.Databases.Vector.Metadata.get -> System.Collections.Generic.IDictionary<string!, object!>?
 LangChain.Databases.Vector.Metadata.set -> void
 LangChain.Databases.Vector.RelevanceScore.get -> float
 LangChain.Databases.Vector.RelevanceScore.set -> void
