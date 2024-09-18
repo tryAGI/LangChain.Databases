@@ -1,3 +1,6 @@
+abstract LangChain.Memory.BaseChatMessageHistory.AddMessage(LangChain.Providers.Message message) -> System.Threading.Tasks.Task!
+abstract LangChain.Memory.BaseChatMessageHistory.Clear() -> System.Threading.Tasks.Task!
+abstract LangChain.Memory.BaseChatMessageHistory.Messages.get -> System.Collections.Generic.IReadOnlyList<LangChain.Providers.Message>!
 const LangChain.Databases.VectorCollection.DefaultName = "langchain" -> string!
 LangChain.Databases.DistanceStrategy
 LangChain.Databases.DistanceStrategy.Cosine = 1 -> LangChain.Databases.DistanceStrategy
@@ -67,6 +70,21 @@ LangChain.Databases.VectorSearchType
 LangChain.Databases.VectorSearchType.MaximumMarginalRelevance = 2 -> LangChain.Databases.VectorSearchType
 LangChain.Databases.VectorSearchType.Similarity = 0 -> LangChain.Databases.VectorSearchType
 LangChain.Databases.VectorSearchType.SimilarityScoreThreshold = 1 -> LangChain.Databases.VectorSearchType
+LangChain.Memory.BaseChatMessageHistory
+LangChain.Memory.BaseChatMessageHistory.AddAiMessage(string! message) -> System.Threading.Tasks.Task!
+LangChain.Memory.BaseChatMessageHistory.AddUserMessage(string! message) -> System.Threading.Tasks.Task!
+LangChain.Memory.BaseChatMessageHistory.BaseChatMessageHistory() -> void
+LangChain.Memory.ChatMessageHistory
+LangChain.Memory.ChatMessageHistory.ChatMessageHistory() -> void
+LangChain.Memory.ChatMessageHistory.IsMessageAccepted.get -> System.Predicate<LangChain.Providers.Message>!
+LangChain.Memory.ChatMessageHistory.IsMessageAccepted.set -> void
+LangChain.Memory.FileChatMessageHistory
+override LangChain.Memory.ChatMessageHistory.AddMessage(LangChain.Providers.Message message) -> System.Threading.Tasks.Task!
+override LangChain.Memory.ChatMessageHistory.Clear() -> System.Threading.Tasks.Task!
+override LangChain.Memory.ChatMessageHistory.Messages.get -> System.Collections.Generic.IReadOnlyList<LangChain.Providers.Message>!
+override LangChain.Memory.FileChatMessageHistory.AddMessage(LangChain.Providers.Message message) -> System.Threading.Tasks.Task!
+override LangChain.Memory.FileChatMessageHistory.Clear() -> System.Threading.Tasks.Task!
+override LangChain.Memory.FileChatMessageHistory.Messages.get -> System.Collections.Generic.IReadOnlyList<LangChain.Providers.Message>!
 static LangChain.Databases.RelevanceScoreFunctions.Cosine(float distance) -> float
 static LangChain.Databases.RelevanceScoreFunctions.Euclidean(float distance) -> float
 static LangChain.Databases.RelevanceScoreFunctions.Get(LangChain.Databases.DistanceStrategy distanceStrategy) -> System.Func<float, float>!
@@ -75,3 +93,6 @@ static LangChain.Databases.VectorSearchRequest.implicit operator LangChain.Datab
 static LangChain.Databases.VectorSearchRequest.implicit operator LangChain.Databases.VectorSearchRequest!(float[]![]! embeddings) -> LangChain.Databases.VectorSearchRequest!
 static LangChain.Databases.VectorSearchRequest.ToVectorSearchRequest(float[]! embedding) -> LangChain.Databases.VectorSearchRequest!
 static LangChain.Databases.VectorSearchRequest.ToVectorSearchRequest(float[]![]! embeddings) -> LangChain.Databases.VectorSearchRequest!
+static LangChain.Memory.FileChatMessageHistory.CreateAsync(string! path, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<LangChain.Memory.FileChatMessageHistory!>!
+virtual LangChain.Memory.BaseChatMessageHistory.AddMessages(System.Collections.Generic.IEnumerable<LangChain.Providers.Message>! messages) -> System.Threading.Tasks.Task!
+virtual LangChain.Memory.BaseChatMessageHistory.SetMessages(System.Collections.Generic.IEnumerable<LangChain.Providers.Message>! messages) -> System.Threading.Tasks.Task!

@@ -26,7 +26,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="LangChain.Providers.Amazon.Bedrock" />
+      <PackageReference Include="LangChain.DocumentLoaders.Abstractions" />
+      <PackageReference Include="LangChain.Providers.Abstractions" />
+      <PackageReference Include="LangChain.Splitters.Abstractions" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
       <PackageReference Include="Testcontainers" />
       <PackageReference Include="Testcontainers.Elasticsearch" />
@@ -34,7 +36,6 @@
       <PackageReference Include="Testcontainers.PostgreSql" />
       <PackageReference Include="Testcontainers.MongoDb" />
       <PackageReference Include="Testcontainers.Redis" />
-      <PackageReference Include="LangChain.DocumentLoaders.Pdf" />
     </ItemGroup>
 
 </Project>

@@ -12,6 +12,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="LangChain.Polyfills" />
+        <PackageReference Include="LangChain.Providers.Abstractions" />
         <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

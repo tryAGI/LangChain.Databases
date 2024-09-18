@@ -12,7 +12,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="LangChain.Core" />
         <PackageReference Include="MongoDB.Bson" />
         <PackageReference Include="MongoDB.Driver" />
         <PackageReference Include="System.Text.Json" />
