@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Text.Json;
-using LangChain.DocumentLoaders;
 using Microsoft.Data.Sqlite;
 
 namespace LangChain.Databases.Sqlite;
@@ -26,9 +25,9 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
         _connection = connection ?? throw new ArgumentNullException(nameof(connection));
     }
 
-    private static string SerializeDocument(Document document)
+    private static string SerializeDocument(Vector document)
     {
-        return JsonSerializer.Serialize(document, SourceGenerationContext.Default.Document);
+        return JsonSerializer.Serialize(document, SourceGenerationContext.Default.Vector);
     }
 
     private static string SerializeVector(float[] vector)
@@ -36,7 +35,7 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
         return JsonSerializer.Serialize(vector, SourceGenerationContext.Default.SingleArray);
     }
 
-    private async Task InsertDocument(string id, float[] vector, Document document)
+    private async Task InsertDocument(string id, float[] vector, Vector document)
     {
         var insertCommand = _connection.CreateCommand();
         string query = $"INSERT INTO {Name} (id, vector, document) VALUES (@id, @vector, @document)";
@@ -57,21 +56,24 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
         await deleteCommand.ExecuteNonQueryAsync().ConfigureAwait(false);
     }
 
-    private async Task<List<(Document, float)>> SearchByVector(float[] vector, int k)
+    private async Task<List<(Vector, float)>> SearchByVector(float[] vector, int k)
     {
         var searchCommand = _connection.CreateCommand();
         string query = $"SELECT id, vector, document, distance(vector, @vector) d FROM {Name} ORDER BY d LIMIT @k";
         searchCommand.CommandText = query;
         searchCommand.Parameters.AddWithValue("@vector", SerializeVector(vector));
         searchCommand.Parameters.AddWithValue("@k", k);
-        var res = new List<(Document, float)>();
+        var res = new List<(Vector, float)>();
         var reader = await searchCommand.ExecuteReaderAsync().ConfigureAwait(false);
         while (await reader.ReadAsync().ConfigureAwait(false))
         {
             var id = reader.GetString(0);
             var vec = await reader.GetFieldValueAsync<string>(1).ConfigureAwait(false);
             var doc = await reader.GetFieldValueAsync<string>(2).ConfigureAwait(false);
-            var docDeserialized = JsonSerializer.Deserialize(doc, SourceGenerationContext.Default.Document) ?? new Document("");
+            var docDeserialized = JsonSerializer.Deserialize(doc, SourceGenerationContext.Default.Vector) ?? new Vector
+            {
+                Text = string.Empty,
+            };
             var distance = reader.GetFloat(3);
             res.Add((docDeserialized, distance));
 
@@ -94,7 +96,11 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
                 throw new ArgumentException("Embedding is required", nameof(items));
             }
 
-            await InsertDocument(item.Id, item.Embedding, new Document(item.Text, item.Metadata)).ConfigureAwait(false);
+            await InsertDocument(item.Id, item.Embedding, new Vector
+            {
+                Text = item.Text,
+                Metadata = item.Metadata,
+            }).ConfigureAwait(false);
         }
 
         return items.Select(i => i.Id).ToArray();
@@ -115,12 +121,15 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
 
         var vec = await reader.GetFieldValueAsync<string>(0, cancellationToken).ConfigureAwait(false);
         var doc = await reader.GetFieldValueAsync<string>(1, cancellationToken).ConfigureAwait(false);
-        var docDeserialized = JsonSerializer.Deserialize(doc, SourceGenerationContext.Default.Document) ?? new Document("");
+        var docDeserialized = JsonSerializer.Deserialize(doc, SourceGenerationContext.Default.Vector) ?? new Vector
+        {
+            Text = string.Empty,
+        };
 
         return new Vector
         {
             Id = id,
-            Text = docDeserialized.PageContent,
+            Text = docDeserialized.Text,
             Metadata = docDeserialized.Metadata,
             Embedding = JsonSerializer.Deserialize(vec, SourceGenerationContext.Default.SingleArray),
         };
@@ -165,7 +174,7 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
         {
             Items = documents.Select(d => new Vector
             {
-                Text = d.Item1.PageContent,
+                Text = d.Item1.Text,
                 Metadata = d.Item1.Metadata,
                 Distance = d.Item2,
             }).ToArray(),

@@ -11,7 +11,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="LangChain.Core" />
         <PackageReference Include="LangChain.Serve.Abstractions" />
         <PackageReference Include="Microsoft.Data.Sqlite.Core" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
