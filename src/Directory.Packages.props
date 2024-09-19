@@ -12,11 +12,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
-    <PackageVersion Include="LangChain.DocumentLoaders.Abstractions" Version="0.15.1-dev.129" />
-    <PackageVersion Include="LangChain.Polyfills" Version="0.15.1-dev.129" />
+    <PackageVersion Include="LangChain.DocumentLoaders.Abstractions" Version="0.15.1-dev.130" />
+    <PackageVersion Include="LangChain.Polyfills" Version="0.15.2" />
     <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.15.2" />
-    <PackageVersion Include="LangChain.Serve.Abstractions" Version="0.15.1-dev.129" />
-    <PackageVersion Include="LangChain.Splitters.Abstractions" Version="0.15.1-dev.129" />
+    <PackageVersion Include="LangChain.Serve.Abstractions" Version="0.15.2" />
+    <PackageVersion Include="LangChain.Splitters.Abstractions" Version="0.15.2" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="8.0.8" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
