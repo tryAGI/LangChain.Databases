@@ -44,7 +44,7 @@ public class FileChatMessageHistory : BaseChatMessageHistory
     {
         _messages.Add(message);
         SaveMessages();
-        
+
         return Task.CompletedTask;
     }
 
@@ -53,14 +53,14 @@ public class FileChatMessageHistory : BaseChatMessageHistory
     {
         _messages.Clear();
         SaveMessages();
-        
+
         return Task.CompletedTask;
     }
 
     private void SaveMessages()
     {
         var json = JsonSerializer.Serialize(_messages, SourceGenerationContext.Default.ListMessage);
-        
+
         File.WriteAllText(MessagesFilePath, json);
     }
 
