@@ -1,6 +1,7 @@
-﻿using System.Globalization;
+﻿using Microsoft.Data.Sqlite;
+using System.Globalization;
 using System.Text.Json;
-using Microsoft.Data.Sqlite;
+using System.Text.RegularExpressions;
 
 namespace LangChain.Databases.Sqlite;
 
@@ -211,6 +212,10 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
 
             foreach (var filter in filters)
             {
+                // Validate filter.Key to prevent injection in JSON path
+                if (string.IsNullOrWhiteSpace(filter.Key) || !IsValidJsonKey(filter.Key))
+                    throw new ArgumentException($"Invalid filter key: {filter.Key}", nameof(filters));
+
                 var paramName = "@param" + paramIndex++;
                 whereClauses.Add($"json_extract(document, '$.Metadata.{filter.Key}') = {paramName}");
                 command.Parameters.AddWithValue(paramName, filter.Value);
@@ -246,5 +251,11 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
                 return res;
             }
         }
+    }
+
+    private static bool IsValidJsonKey(string input)
+    {
+        // Only allow letters, numbers, and underscores
+        return Regex.IsMatch(input, @"^\w+$");
     }
 }
