@@ -58,6 +58,16 @@ public interface IVectorCollection
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Searches for records based on a metadata filter from a specific collection.
+    /// </summary>
+    /// <param name="filters">The filters to apply to the search request.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation. The task result contains the search response.</returns>
+    Task<List<Vector>> SearchByMetadata(
+        Dictionary<string, object> filters,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Checks if the collection is empty.
     /// </summary>
     /// <param name="cancellationToken">The cancellation token.</param>

@@ -91,4 +91,9 @@ public class InMemoryVectorCollection(
     {
         return Task.FromResult(_vectors.GetValueOrDefault(id));
     }
+
+    Task<List<Vector>> IVectorCollection.SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }
