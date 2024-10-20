@@ -1,3 +1,4 @@
+
 namespace LangChain.Databases.Postgres;
 
 /// <summary>
@@ -120,6 +121,11 @@ public class PostgresVectorCollection(
 
     /// <inheritdoc />
     public Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<List<Vector>> IVectorCollection.SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

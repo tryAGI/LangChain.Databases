@@ -70,4 +70,9 @@ public class MongoVectorCollection(
             .ToArray(),
         };
     }
+
+    Task<List<Vector>> IVectorCollection.SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -166,6 +166,11 @@ public class ChromaVectorCollection(
         return JsonSerializer.Deserialize(metadata.AdditionalMetadata, SourceGenerationContext.Default.IDictionaryStringObject)
                ?? new Dictionary<string, object>();
     }
+
+    Task<List<Vector>> IVectorCollection.SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken)
+    {
+        throw new NotSupportedException("SemanticKernel doesn't support collection metadata");
+    }
 }
 
 [JsonSourceGenerationOptions(Converters = [typeof(ObjectAsPrimitiveConverter)])]
