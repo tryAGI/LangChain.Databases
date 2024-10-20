@@ -92,8 +92,29 @@ public class InMemoryVectorCollection(
         return Task.FromResult(_vectors.GetValueOrDefault(id));
     }
 
-    Task<List<Vector>> IVectorCollection.SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken)
+    public Task<List<Vector>> SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        filters = filters ?? throw new ArgumentNullException(nameof(filters));
+
+        var filteredVectors = _vectors.Values.Where(vector =>
+        {
+            // Check if all filters match
+            foreach (var filter in filters)
+            {
+                object? metadataValue = null;
+                if (vector.Metadata != null && !vector.Metadata.TryGetValue(filter.Key, out metadataValue) || metadataValue == null)
+                {
+                    return false;
+                }
+                else if (!metadataValue.Equals(filter.Value)) // Convert metadata value to string and compare
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }).ToList();
+
+        return Task.FromResult(filteredVectors);
     }
 }

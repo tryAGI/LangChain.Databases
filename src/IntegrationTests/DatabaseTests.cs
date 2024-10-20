@@ -1,5 +1,5 @@
-using LangChain.Extensions;
 using LangChain.DocumentLoaders;
+using LangChain.Extensions;
 
 namespace LangChain.Databases.IntegrationTests;
 
@@ -295,5 +295,48 @@ public partial class DatabaseTests
         {
             first.Distance.Should().BeGreaterOrEqualTo(1f);
         }
+    }
+
+    [TestCase(SupportedDatabase.InMemory)]
+    //[TestCase(SupportedDatabase.Chroma)]
+    //[TestCase(SupportedDatabase.OpenSearch)]
+    //[TestCase(SupportedDatabase.Postgres)]
+    [TestCase(SupportedDatabase.SqLite)]
+    //[TestCase(SupportedDatabase.DuckDb)]
+    //[TestCase(SupportedDatabase.Weaviate)]
+    //[TestCase(SupportedDatabase.Elasticsearch)]
+    //[TestCase(SupportedDatabase.Milvus)]
+    public async Task MetadataSearch_Ok(SupportedDatabase database)
+    {
+        await using var environment = await StartEnvironmentForAsync(database);
+        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
+
+        var texts = new[] { "apple", "orange" };
+
+        var metadatas = new Dictionary<string, object>[2];
+        metadatas[0] = new Dictionary<string, object>
+        {
+            ["color"] = "red"
+        };
+
+        metadatas[1] = new Dictionary<string, object>
+        {
+            ["color"] = "orange"
+        };
+
+        var totalItems = await vectorCollection.AddTextsAsync(environment.EmbeddingModel, texts, metadatas);
+
+        // Define the filters to get the orange entry
+        var filters = new Dictionary<string, object>
+        {
+            { "color", "orange" }
+        };
+
+
+        var items = await vectorCollection.SearchByMetadata(filters);
+
+        totalItems.Should().HaveCount(2);
+        items.Should().HaveCount(1);
+        var vector = items.SingleOrDefault()?.Metadata?["color"].Should().Be("orange");
     }
 }
