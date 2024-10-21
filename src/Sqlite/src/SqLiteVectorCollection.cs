@@ -38,56 +38,52 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
 
     private async Task InsertDocument(string id, float[] vector, Vector document)
     {
-        using (var insertCommand = _connection.CreateCommand())
-        {
-            string query = $"INSERT INTO {Name} (id, vector, document) VALUES (@id, @vector, @document)";
-            insertCommand.CommandText = query;
-            insertCommand.Parameters.AddWithValue("@id", id);
-            insertCommand.Parameters.AddWithValue("@vector", SerializeVector(vector));
-            insertCommand.Parameters.AddWithValue("@document", SerializeDocument(document));
-            await insertCommand.ExecuteNonQueryAsync().ConfigureAwait(false);
-        }
+        using var insertCommand = _connection.CreateCommand();
+
+        string query = $"INSERT INTO {Name} (id, vector, document) VALUES (@id, @vector, @document)";
+        insertCommand.CommandText = query;
+        insertCommand.Parameters.AddWithValue("@id", id);
+        insertCommand.Parameters.AddWithValue("@vector", SerializeVector(vector));
+        insertCommand.Parameters.AddWithValue("@document", SerializeDocument(document));
+        await insertCommand.ExecuteNonQueryAsync().ConfigureAwait(false);
     }
 
     private async Task DeleteDocument(string id)
     {
-        using (var deleteCommand = _connection.CreateCommand())
-        {
-            string query = $"DELETE FROM {Name} WHERE id=@id";
-            deleteCommand.CommandText = query;
-            deleteCommand.Parameters.AddWithValue("@id", id);
-            await deleteCommand.ExecuteNonQueryAsync().ConfigureAwait(false);
-        }
+        using var deleteCommand = _connection.CreateCommand();
+
+        string query = $"DELETE FROM {Name} WHERE id=@id";
+        deleteCommand.CommandText = query;
+        deleteCommand.Parameters.AddWithValue("@id", id);
+        await deleteCommand.ExecuteNonQueryAsync().ConfigureAwait(false);
     }
 
     private async Task<List<(Vector, float)>> SearchByVector(float[] vector, int k)
     {
-        using (var searchCommand = _connection.CreateCommand())
+        using var searchCommand = _connection.CreateCommand();
+
+        string query = $"SELECT id, vector, document, distance(vector, @vector) d FROM {Name} ORDER BY d LIMIT @k";
+        searchCommand.CommandText = query;
+        searchCommand.Parameters.AddWithValue("@vector", SerializeVector(vector));
+        searchCommand.Parameters.AddWithValue("@k", k);
+        var res = new List<(Vector, float)>();
+
+        using var reader = await searchCommand.ExecuteReaderAsync().ConfigureAwait(false);
+
+        while (await reader.ReadAsync().ConfigureAwait(false))
         {
-            string query = $"SELECT id, vector, document, distance(vector, @vector) d FROM {Name} ORDER BY d LIMIT @k";
-            searchCommand.CommandText = query;
-            searchCommand.Parameters.AddWithValue("@vector", SerializeVector(vector));
-            searchCommand.Parameters.AddWithValue("@k", k);
-            var res = new List<(Vector, float)>();
-
-            using (var reader = await searchCommand.ExecuteReaderAsync().ConfigureAwait(false))
+            var id = reader.GetString(0);
+            var vec = await reader.GetFieldValueAsync<string>(1).ConfigureAwait(false);
+            var doc = await reader.GetFieldValueAsync<string>(2).ConfigureAwait(false);
+            var docDeserialized = JsonSerializer.Deserialize(doc, SourceGenerationContext.Default.Vector) ?? new Vector
             {
-                while (await reader.ReadAsync().ConfigureAwait(false))
-                {
-                    var id = reader.GetString(0);
-                    var vec = await reader.GetFieldValueAsync<string>(1).ConfigureAwait(false);
-                    var doc = await reader.GetFieldValueAsync<string>(2).ConfigureAwait(false);
-                    var docDeserialized = JsonSerializer.Deserialize(doc, SourceGenerationContext.Default.Vector) ?? new Vector
-                    {
-                        Text = string.Empty,
-                    };
-                    var distance = reader.GetFloat(3);
-                    res.Add((docDeserialized, distance));
-                }
-
-                return res;
-            }
+                Text = string.Empty,
+            };
+            var distance = reader.GetFloat(3);
+            res.Add((docDeserialized, distance));
         }
+
+        return res;
     }
 
     /// <inheritdoc />
@@ -117,48 +113,45 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
     /// <inheritdoc />
     public async Task<Vector?> GetAsync(string id, CancellationToken cancellationToken = default)
     {
-        using (var command = _connection.CreateCommand())
+        using var command = _connection.CreateCommand();
+
+        var query = $"SELECT vector, document FROM {Name} WHERE id=@id";
+        command.CommandText = query;
+        command.Parameters.AddWithValue("@id", id);
+
+        using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+
+        if (!await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
         {
-            var query = $"SELECT vector, document FROM {Name} WHERE id=@id";
-            command.CommandText = query;
-            command.Parameters.AddWithValue("@id", id);
-
-            using (var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false))
-            {
-                if (!await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
-                {
-                    return null;
-                }
-
-                var vec = await reader.GetFieldValueAsync<string>(0, cancellationToken).ConfigureAwait(false);
-                var doc = await reader.GetFieldValueAsync<string>(1, cancellationToken).ConfigureAwait(false);
-                var docDeserialized = JsonSerializer.Deserialize(doc, SourceGenerationContext.Default.Vector) ?? new Vector
-                {
-                    Text = string.Empty,
-                };
-
-                return new Vector
-                {
-                    Id = id,
-                    Text = docDeserialized.Text,
-                    Metadata = docDeserialized.Metadata,
-                    Embedding = JsonSerializer.Deserialize(vec, SourceGenerationContext.Default.SingleArray),
-                };
-            }
+            return null;
         }
+
+        var vec = await reader.GetFieldValueAsync<string>(0, cancellationToken).ConfigureAwait(false);
+        var doc = await reader.GetFieldValueAsync<string>(1, cancellationToken).ConfigureAwait(false);
+        var docDeserialized = JsonSerializer.Deserialize(doc, SourceGenerationContext.Default.Vector) ?? new Vector
+        {
+            Text = string.Empty,
+        };
+
+        return new Vector
+        {
+            Id = id,
+            Text = docDeserialized.Text,
+            Metadata = docDeserialized.Metadata,
+            Embedding = JsonSerializer.Deserialize(vec, SourceGenerationContext.Default.SingleArray),
+        };
     }
 
     /// <inheritdoc />
     public async Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
     {
-        using (var command = _connection.CreateCommand())
-        {
-            var query = $"SELECT COUNT(*) FROM {Name}";
-            command.CommandText = query;
-            var count = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+        using var command = _connection.CreateCommand();
 
-            return count == null || Convert.ToInt32(count, CultureInfo.InvariantCulture) == 0;
-        }
+        var query = $"SELECT COUNT(*) FROM {Name}";
+        command.CommandText = query;
+        var count = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+
+        return count == null || Convert.ToInt32(count, CultureInfo.InvariantCulture) == 0;
     }
 
     /// <inheritdoc />
@@ -203,54 +196,52 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
     {
         filters = filters ?? throw new ArgumentNullException(nameof(filters));
 
-        using (var command = _connection.CreateCommand())
+        using var command = _connection.CreateCommand();
+
+        var query = $"SELECT id, vector, document FROM {Name}";
+
+        var whereClauses = new List<string>();
+        int paramIndex = 0;
+
+        foreach (var filter in filters)
         {
-            var query = $"SELECT id, vector, document FROM {Name}";
+            // Validate filter.Key to prevent injection in JSON path
+            if (string.IsNullOrWhiteSpace(filter.Key) || !IsValidJsonKey(filter.Key))
+                throw new ArgumentException($"Invalid filter key: {filter.Key}", nameof(filters));
 
-            var whereClauses = new List<string>();
-            int paramIndex = 0;
-
-            foreach (var filter in filters)
-            {
-                // Validate filter.Key to prevent injection in JSON path
-                if (string.IsNullOrWhiteSpace(filter.Key) || !IsValidJsonKey(filter.Key))
-                    throw new ArgumentException($"Invalid filter key: {filter.Key}", nameof(filters));
-
-                var paramName = "@param" + paramIndex++;
-                whereClauses.Add($"json_extract(document, '$.Metadata.{filter.Key}') = {paramName}");
-                command.Parameters.AddWithValue(paramName, filter.Value);
-            }
-            query += " WHERE " + string.Join(" AND ", whereClauses);
-
-            command.CommandText = query;
-            var res = new List<Vector>();
-
-            using (var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false))
-            {
-                while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
-                {
-                    var id = await reader.GetFieldValueAsync<string>(0, cancellationToken).ConfigureAwait(false);
-                    var vec = await reader.GetFieldValueAsync<string>(1, cancellationToken).ConfigureAwait(false);
-                    var doc = await reader.GetFieldValueAsync<string>(2, cancellationToken).ConfigureAwait(false);
-                    var docDeserialized = JsonSerializer.Deserialize(doc, SourceGenerationContext.Default.Vector) ?? new Vector
-                    {
-                        Text = string.Empty,
-                    };
-
-                    var vector = new Vector
-                    {
-                        Id = id,
-                        Text = docDeserialized.Text,
-                        Metadata = docDeserialized.Metadata,
-                        Embedding = JsonSerializer.Deserialize(vec, SourceGenerationContext.Default.SingleArray),
-                    };
-
-                    res.Add(vector);
-                }
-
-                return res;
-            }
+            var paramName = "@param" + paramIndex++;
+            whereClauses.Add($"json_extract(document, '$.Metadata.{filter.Key}') = {paramName}");
+            command.Parameters.AddWithValue(paramName, filter.Value);
         }
+        query += " WHERE " + string.Join(" AND ", whereClauses);
+
+        command.CommandText = query;
+        var res = new List<Vector>();
+
+        using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+
+        while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+        {
+            var id = await reader.GetFieldValueAsync<string>(0, cancellationToken).ConfigureAwait(false);
+            var vec = await reader.GetFieldValueAsync<string>(1, cancellationToken).ConfigureAwait(false);
+            var doc = await reader.GetFieldValueAsync<string>(2, cancellationToken).ConfigureAwait(false);
+            var docDeserialized = JsonSerializer.Deserialize(doc, SourceGenerationContext.Default.Vector) ?? new Vector
+            {
+                Text = string.Empty,
+            };
+
+            var vector = new Vector
+            {
+                Id = id,
+                Text = docDeserialized.Text,
+                Metadata = docDeserialized.Metadata,
+                Embedding = JsonSerializer.Deserialize(vec, SourceGenerationContext.Default.SingleArray),
+            };
+
+            res.Add(vector);
+        }
+
+        return res;
     }
 
     private static bool IsValidJsonKey(string input)

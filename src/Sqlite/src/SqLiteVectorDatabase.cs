@@ -1,5 +1,5 @@
-﻿using System.Text.Json;
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
+using System.Text.Json;
 
 namespace LangChain.Databases.Sqlite;
 
@@ -64,7 +64,7 @@ public sealed class SqLiteVectorDatabase : IVectorDatabase, IDisposable
     /// <inheritdoc />
     public async Task DeleteCollectionAsync(string collectionName, CancellationToken cancellationToken = default)
     {
-        var command = _connection.CreateCommand();
+        using var command = _connection.CreateCommand();
         command.CommandText = $"DROP TABLE IF EXISTS {collectionName}";
 
         await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
@@ -84,7 +84,7 @@ public sealed class SqLiteVectorDatabase : IVectorDatabase, IDisposable
     /// <inheritdoc />
     public async Task<bool> IsCollectionExistsAsync(string collectionName, CancellationToken cancellationToken = default)
     {
-        var command = _connection.CreateCommand();
+        using var command = _connection.CreateCommand();
         command.CommandText = $"SELECT name FROM sqlite_master WHERE type='table' AND name='{collectionName}'";
         var result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
 
@@ -94,16 +94,20 @@ public sealed class SqLiteVectorDatabase : IVectorDatabase, IDisposable
     /// <inheritdoc />
     public async Task CreateCollectionAsync(string collectionName, int dimensions, CancellationToken cancellationToken = default)
     {
-        var command = _connection.CreateCommand();
-        command.CommandText = $"CREATE TABLE IF NOT EXISTS {collectionName} (id TEXT PRIMARY KEY, vector BLOB, document TEXT)";
+        using var commandCreate = _connection.CreateCommand();
+        commandCreate.CommandText = $"CREATE TABLE IF NOT EXISTS {collectionName} (id TEXT PRIMARY KEY, vector BLOB, document TEXT)";
+        await commandCreate.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 
-        await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+        //create an index so metadata searching is faster
+        using var commandIndex = _connection.CreateCommand();
+        commandIndex.CommandText = $"CREATE INDEX idx_langchain_json_id ON {collectionName}(json_extract(document, '$.Metadata'))";
+        await commandIndex.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<string>> ListCollectionsAsync(CancellationToken cancellationToken = default)
     {
-        var command = _connection.CreateCommand();
+        using var command = _connection.CreateCommand();
         command.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'vectors' AND name NOT LIKE 'sqlite_%';";
         var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
 
