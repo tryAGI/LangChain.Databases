@@ -14,6 +14,7 @@ LangChain.Databases.IVectorCollection.Id.get -> string!
 LangChain.Databases.IVectorCollection.IsEmptyAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<bool>!
 LangChain.Databases.IVectorCollection.Name.get -> string!
 LangChain.Databases.IVectorCollection.SearchAsync(LangChain.Databases.VectorSearchRequest! request, LangChain.Databases.VectorSearchSettings? settings = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<LangChain.Databases.VectorSearchResponse!>!
+LangChain.Databases.IVectorCollection.SearchByMetadata(System.Collections.Generic.Dictionary<string!, object!>! filters, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<System.Collections.Generic.List<LangChain.Databases.Vector!>!>!
 LangChain.Databases.IVectorDatabase
 LangChain.Databases.IVectorDatabase.CreateCollectionAsync(string! collectionName, int dimensions, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
 LangChain.Databases.IVectorDatabase.DeleteCollectionAsync(string! collectionName, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
