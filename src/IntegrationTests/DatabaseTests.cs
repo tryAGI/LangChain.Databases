@@ -298,10 +298,10 @@ public partial class DatabaseTests
     }
 
     [TestCase(SupportedDatabase.InMemory)]
-    //[TestCase(SupportedDatabase.Chroma)]
     //[TestCase(SupportedDatabase.OpenSearch)]
     //[TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
+    [TestCase(SupportedDatabase.Mongo)]
     //[TestCase(SupportedDatabase.DuckDb)]
     //[TestCase(SupportedDatabase.Weaviate)]
     //[TestCase(SupportedDatabase.Elasticsearch)]
