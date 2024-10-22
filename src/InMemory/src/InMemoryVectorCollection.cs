@@ -92,11 +92,10 @@ public class InMemoryVectorCollection(
         return Task.FromResult(_vectors.GetValueOrDefault(id));
     }
 
-    public Task<List<Vector>> SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken = default)
+    public async Task<List<Vector>> SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken = default)
     {
         filters = filters ?? throw new ArgumentNullException(nameof(filters));
-
-        var filteredVectors = _vectors.Values.Where(vector =>
+        var filteredVectors = await Task.Run(() => _vectors.Values.Where(vector =>
         {
             // Check if all filters match
             foreach (var filter in filters)
@@ -113,8 +112,9 @@ public class InMemoryVectorCollection(
             }
 
             return true;
-        }).ToList();
 
-        return Task.FromResult(filteredVectors);
+        }).ToList(), cancellationToken).ConfigureAwait(false);
+
+        return filteredVectors;
     }
 }

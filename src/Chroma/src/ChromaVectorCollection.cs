@@ -167,9 +167,9 @@ public class ChromaVectorCollection(
                ?? new Dictionary<string, object>();
     }
 
-    Task<List<Vector>> IVectorCollection.SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken)
+    public Task<List<Vector>> SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken)
     {
-        throw new NotSupportedException("SemanticKernel doesn't support collection metadata");
+        throw new NotSupportedException("Chroma doesn't support collection metadata");
     }
 }
 
