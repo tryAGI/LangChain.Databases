@@ -11,7 +11,7 @@ public class MongoVectorCollection(
     string? id = null)
 : VectorCollection(name, id), IVectorCollection
 {
-    private IMongoCollection<Vector> _mongoCollection = mongoContext.GetCollection<Vector>(name);
+    private readonly IMongoCollection<Vector> _mongoCollection = mongoContext.GetCollection<Vector>(name);
 
     public async Task<IReadOnlyCollection<string>> AddAsync(IReadOnlyCollection<Vector> items, CancellationToken cancellationToken = default)
     {
@@ -80,6 +80,11 @@ public class MongoVectorCollection(
 
         foreach (var kvp in filters)
         {
+            if (kvp.Value == null)
+            {
+                throw new ArgumentException($"Metadata value for key '{kvp.Key}' cannot be null", nameof(filters));
+            }
+
             // Assuming your Vector class has a Metadata field of type Dictionary<string, object>
             var filter = builder.Eq($"Metadata.{kvp.Key}", kvp.Value);
             filterDefinitions.Add(filter);

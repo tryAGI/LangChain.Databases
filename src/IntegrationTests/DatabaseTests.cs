@@ -1,5 +1,7 @@
 using LangChain.DocumentLoaders;
 using LangChain.Extensions;
+using StackExchange.Redis;
+using System;
 
 namespace LangChain.Databases.IntegrationTests;
 
@@ -336,7 +338,30 @@ public partial class DatabaseTests
         var items = await vectorCollection.SearchByMetadata(filters);
 
         totalItems.Should().HaveCount(2);
+
         items.Should().HaveCount(1);
-        var vector = items.SingleOrDefault()?.Metadata?["color"].Should().Be("orange");
+        var result = items.Single();
+        result.Text.Should().Be("orange");
+        result.Metadata.Should().ContainKey("color");
+        result.Metadata?["color"].Should().Be("orange");
+    }
+
+    [TestCase(SupportedDatabase.InMemory)]
+    //[TestCase(SupportedDatabase.OpenSearch)]
+    //[TestCase(SupportedDatabase.Postgres)]
+    [TestCase(SupportedDatabase.SqLite)]
+    [TestCase(SupportedDatabase.Mongo)]
+    //[TestCase(SupportedDatabase.DuckDb)]
+    //[TestCase(SupportedDatabase.Weaviate)]
+    //[TestCase(SupportedDatabase.Elasticsearch)]
+    //[TestCase(SupportedDatabase.Milvus)]
+    public async Task SearchByMetadata_WithNullFilters_ThrowsArgumentException(SupportedDatabase database)
+    {
+        await using var environment = await StartEnvironmentForAsync(database);
+        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
+
+        // Act & Assert
+        await vectorCollection.Invoking(v => v.SearchByMetadata(null!))
+            .Should().ThrowAsync<ArgumentNullException>();
     }
 }
