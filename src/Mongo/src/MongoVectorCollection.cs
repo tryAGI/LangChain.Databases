@@ -11,7 +11,7 @@ public class MongoVectorCollection(
     string? id = null)
 : VectorCollection(name, id), IVectorCollection
 {
-    private IMongoCollection<Vector> _mongoCollection = mongoContext.GetCollection<Vector>(name);
+    private readonly IMongoCollection<Vector> _mongoCollection = mongoContext.GetCollection<Vector>(name);
 
     public async Task<IReadOnlyCollection<string>> AddAsync(IReadOnlyCollection<Vector> items, CancellationToken cancellationToken = default)
     {
@@ -71,8 +71,32 @@ public class MongoVectorCollection(
         };
     }
 
-    Task<List<Vector>> IVectorCollection.SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken)
+    public async Task<List<Vector>> SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        filters = filters ?? throw new ArgumentNullException(nameof(filters));
+
+        var builder = Builders<Vector>.Filter;
+        var filterDefinitions = new List<FilterDefinition<Vector>>();
+
+        foreach (var kvp in filters)
+        {
+            if (kvp.Value == null)
+            {
+                throw new ArgumentException($"Metadata value for key '{kvp.Key}' cannot be null", nameof(filters));
+            }
+
+            // Assuming your Vector class has a Metadata field of type Dictionary<string, object>
+            var filter = builder.Eq($"Metadata.{kvp.Key}", kvp.Value);
+            filterDefinitions.Add(filter);
+        }
+
+        var combinedFilter = builder.And(filterDefinitions);
+
+        var results = await _mongoCollection
+            .Find(combinedFilter)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        return results;
     }
 }
