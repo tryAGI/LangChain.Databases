@@ -1,4 +1,3 @@
-
 namespace LangChain.Databases.Postgres;
 
 /// <summary>
@@ -125,8 +124,28 @@ public class PostgresVectorCollection(
         throw new NotImplementedException();
     }
 
-    Task<List<Vector>> IVectorCollection.SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken)
+    public async Task<List<Vector>> SearchByMetadata(
+        Dictionary<string, object> filters,
+        CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        filters = filters ?? throw new ArgumentNullException(nameof(filters));
+
+        var records = await client
+            .GetRecordsByMetadataAsync(
+                Name,
+                filters,
+                withEmbeddings: false,
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        var vectors = records.Select(record => new Vector
+        {
+            Id = record.Id,
+            Text = record.Content,
+            Metadata = record.Metadata,
+            // Embedding is null since withEmbeddings is false
+        }).ToList();
+
+        return vectors;
     }
 }

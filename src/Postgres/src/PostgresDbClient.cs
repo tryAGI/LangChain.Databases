@@ -1,11 +1,10 @@
+using LangChain.Databases.JsonConverters;
+using Npgsql;
+using NpgsqlTypes;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using LangChain.Databases.JsonConverters;
-using Npgsql;
-using NpgsqlTypes;
-using Pgvector;
 
 namespace LangChain.Databases.Postgres;
 
@@ -80,7 +79,6 @@ public class PostgresDbClient
             return tablesSchema.Rows.Count != 0;
         }
     }
-
 
     public async Task<IReadOnlyList<string>> ListTablesAsync(CancellationToken cancellationToken = default)
     {
@@ -489,6 +487,60 @@ WHERE id = ANY(@ids)";
     /// <param name="tableName"></param>
     /// <returns></returns>
     private string GetFullTableName(string tableName) => $"{_schema}.\"{tableName}\"";
+
+    [CLSCompliant(false)]
+    public async Task<List<EmbeddingTableRecord>> GetRecordsByMetadataAsync(
+        string tableName,
+        Dictionary<string, object> filters,
+        bool withEmbeddings = false,
+        CancellationToken cancellationToken = default)
+    {
+        filters = filters ?? throw new ArgumentNullException(nameof(filters));
+
+        var whereClauses = new List<string>();
+        var parameters = new List<NpgsqlParameter>();
+
+        int paramIndex = 0;
+        foreach (var kvp in filters)
+        {
+            string paramName = $"@p{paramIndex}";
+
+            // Use the JSONB containment operator @> for metadata filtering
+            whereClauses.Add($"metadata @> {paramName}::jsonb");
+
+            // Serialize the key-value pair to JSON
+            var jsonValue = JsonSerializer.Serialize(new Dictionary<string, object> { { kvp.Key, kvp.Value } });
+
+            parameters.Add(new NpgsqlParameter(paramName, NpgsqlDbType.Jsonb) { Value = jsonValue });
+            paramIndex++;
+        }
+
+        string whereClause = string.Join(" AND ", whereClauses);
+
+        var queryColumns = withEmbeddings
+            ? "id, content, metadata, timestamp, embedding"
+            : "id, content, metadata, timestamp";
+
+        string query = $"SELECT {queryColumns} FROM {GetFullTableName(tableName)} WHERE {whereClause}";
+
+        var records = new List<EmbeddingTableRecord>();
+
+        using var connection = await _dataSource.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+
+        using var cmd = connection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddRange(parameters.ToArray());
+
+        using var dataReader = await cmd.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+
+        while (await dataReader.ReadAsync(cancellationToken).ConfigureAwait(false))
+        {
+            var record = await ReadEntryAsync(dataReader, withEmbeddings, cancellationToken).ConfigureAwait(false);
+            records.Add(record);
+        }
+
+        return records;
+    }
 }
 
 /// <summary>

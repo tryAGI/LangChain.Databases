@@ -301,7 +301,7 @@ public partial class DatabaseTests
 
     [TestCase(SupportedDatabase.InMemory)]
     //[TestCase(SupportedDatabase.OpenSearch)]
-    //[TestCase(SupportedDatabase.Postgres)]
+    [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.Mongo)]
     //[TestCase(SupportedDatabase.DuckDb)]
@@ -348,7 +348,7 @@ public partial class DatabaseTests
 
     [TestCase(SupportedDatabase.InMemory)]
     //[TestCase(SupportedDatabase.OpenSearch)]
-    //[TestCase(SupportedDatabase.Postgres)]
+    [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.Mongo)]
     //[TestCase(SupportedDatabase.DuckDb)]
