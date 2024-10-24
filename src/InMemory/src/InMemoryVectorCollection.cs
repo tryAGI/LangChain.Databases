@@ -92,7 +92,7 @@ public class InMemoryVectorCollection(
         return Task.FromResult(_vectors.GetValueOrDefault(id));
     }
 
-    public async Task<List<Vector>> SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<Vector>> SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken = default)
     {
         filters = filters ?? throw new ArgumentNullException(nameof(filters));
         var filteredVectors = await Task.Run(() => _vectors.Values.Where(vector =>

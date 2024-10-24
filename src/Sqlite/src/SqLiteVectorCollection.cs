@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Globalization;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 
 namespace LangChain.Databases.Sqlite;
 
@@ -190,7 +189,7 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
     }
 
     /// <inheritdoc />
-    public async Task<List<Vector>> SearchByMetadata(
+    public async Task<IReadOnlyList<Vector>> SearchByMetadata(
     Dictionary<string, object> filters,
     CancellationToken cancellationToken = default)
     {
@@ -242,11 +241,5 @@ public sealed class SqLiteVectorCollection : VectorCollection, IVectorCollection
         }
 
         return res;
-    }
-
-    private static bool IsValidJsonKey(string input)
-    {
-        // Only allow letters, numbers, and underscores
-        return Regex.IsMatch(input, @"^\w+$");
     }
 }

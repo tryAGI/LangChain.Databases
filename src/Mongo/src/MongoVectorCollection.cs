@@ -13,12 +13,14 @@ public class MongoVectorCollection(
 {
     private readonly IMongoCollection<Vector> _mongoCollection = mongoContext.GetCollection<Vector>(name);
 
+    /// <inheritdoc />
     public async Task<IReadOnlyCollection<string>> AddAsync(IReadOnlyCollection<Vector> items, CancellationToken cancellationToken = default)
     {
         await _mongoCollection.InsertManyAsync(items, cancellationToken: cancellationToken).ConfigureAwait(false);
         return items.Select(i => i.Id).ToList();
     }
 
+    /// <inheritdoc />
     public async Task<bool> DeleteAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default)
     {
         var filter = Builders<Vector>.Filter.In(i => i.Id, ids);
@@ -26,6 +28,7 @@ public class MongoVectorCollection(
         return result.IsAcknowledged;
     }
 
+    /// <inheritdoc />
     public async Task<Vector?> GetAsync(string id, CancellationToken cancellationToken = default)
     {
         var filter = Builders<Vector>.Filter.Eq(i => i.Id, id);
@@ -33,11 +36,13 @@ public class MongoVectorCollection(
         return result.FirstOrDefault(cancellationToken: cancellationToken);
     }
 
+    /// <inheritdoc />
     public async Task<bool> IsEmptyAsync(CancellationToken cancellationToken = default)
     {
         return await _mongoCollection.EstimatedDocumentCountAsync(cancellationToken: cancellationToken).ConfigureAwait(false) == 0;
     }
 
+    /// <inheritdoc />
     public async Task<VectorSearchResponse> SearchAsync(VectorSearchRequest request, VectorSearchSettings? settings = null, CancellationToken cancellationToken = default)
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
@@ -71,7 +76,8 @@ public class MongoVectorCollection(
         };
     }
 
-    public async Task<List<Vector>> SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken = default)
+    /// <inheritdoc />
+    public async Task<IReadOnlyList<Vector>> SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken = default)
     {
         filters = filters ?? throw new ArgumentNullException(nameof(filters));
 

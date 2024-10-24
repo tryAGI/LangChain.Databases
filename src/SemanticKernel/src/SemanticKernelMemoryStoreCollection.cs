@@ -76,7 +76,7 @@ public class SemanticKernelMemoryStoreCollection(IMemoryStore store,
         return new VectorSearchResponse { Items = results.Select(x => new Vector { Text = x.Item1.Metadata.ExternalSourceName }).ToList() };
     }
 
-    Task<List<Vector>> IVectorCollection.SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken)
+    Task<IReadOnlyList<Vector>> IVectorCollection.SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

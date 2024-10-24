@@ -167,7 +167,7 @@ public class ChromaVectorCollection(
                ?? new Dictionary<string, object>();
     }
 
-    public Task<List<Vector>> SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken)
+    public Task<IReadOnlyList<Vector>> SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken)
     {
         throw new NotSupportedException("Chroma doesn't support collection metadata");
     }
