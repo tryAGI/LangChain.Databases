@@ -124,19 +124,33 @@ public class PostgresVectorCollection(
         throw new NotImplementedException();
     }
 
-    public async Task<List<Vector>> SearchByMetadata(
+    /// <inheritdoc />
+    public async Task<IReadOnlyList<Vector>> SearchByMetadata(
         Dictionary<string, object> filters,
         CancellationToken cancellationToken = default)
     {
         filters = filters ?? throw new ArgumentNullException(nameof(filters));
 
+        foreach (var kvp in filters)
+        {
+            if (string.IsNullOrWhiteSpace(kvp.Key))
+            {
+                throw new ArgumentException("Filter key cannot be null or whitespace.", nameof(filters));
+            }
+            // Add more validation for allowed characters
+            if (!IsValidJsonKey(kvp.Key))
+            {
+                throw new ArgumentException($"Invalid character in filter key: {kvp.Key}", nameof(filters));
+            }
+        }
+
         var records = await client
-            .GetRecordsByMetadataAsync(
-                Name,
-                filters,
-                withEmbeddings: false,
-                cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
+        .GetRecordsByMetadataAsync(
+            Name,
+            filters,
+            withEmbeddings: false,
+            cancellationToken: cancellationToken)
+        .ConfigureAwait(false);
 
         var vectors = records.Select(record => new Vector
         {

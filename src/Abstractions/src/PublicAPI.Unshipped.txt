@@ -14,7 +14,7 @@ LangChain.Databases.IVectorCollection.Id.get -> string!
 LangChain.Databases.IVectorCollection.IsEmptyAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<bool>!
 LangChain.Databases.IVectorCollection.Name.get -> string!
 LangChain.Databases.IVectorCollection.SearchAsync(LangChain.Databases.VectorSearchRequest! request, LangChain.Databases.VectorSearchSettings? settings = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<LangChain.Databases.VectorSearchResponse!>!
-LangChain.Databases.IVectorCollection.SearchByMetadata(System.Collections.Generic.Dictionary<string!, object!>! filters, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<System.Collections.Generic.List<LangChain.Databases.Vector!>!>!
+LangChain.Databases.IVectorCollection.SearchByMetadata(System.Collections.Generic.Dictionary<string!, object!>! filters, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<LangChain.Databases.Vector!>!>!
 LangChain.Databases.IVectorDatabase
 LangChain.Databases.IVectorDatabase.CreateCollectionAsync(string! collectionName, int dimensions, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
 LangChain.Databases.IVectorDatabase.DeleteCollectionAsync(string! collectionName, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
@@ -90,6 +90,7 @@ static LangChain.Databases.RelevanceScoreFunctions.Cosine(float distance) -> flo
 static LangChain.Databases.RelevanceScoreFunctions.Euclidean(float distance) -> float
 static LangChain.Databases.RelevanceScoreFunctions.Get(LangChain.Databases.DistanceStrategy distanceStrategy) -> System.Func<float, float>!
 static LangChain.Databases.RelevanceScoreFunctions.MaxInnerProduct(float distance) -> float
+static LangChain.Databases.VectorCollection.IsValidJsonKey(string! input) -> bool
 static LangChain.Databases.VectorSearchRequest.implicit operator LangChain.Databases.VectorSearchRequest!(float[]! embedding) -> LangChain.Databases.VectorSearchRequest!
 static LangChain.Databases.VectorSearchRequest.implicit operator LangChain.Databases.VectorSearchRequest!(float[]![]! embeddings) -> LangChain.Databases.VectorSearchRequest!
 static LangChain.Databases.VectorSearchRequest.ToVectorSearchRequest(float[]! embedding) -> LangChain.Databases.VectorSearchRequest!

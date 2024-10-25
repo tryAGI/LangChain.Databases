@@ -134,7 +134,7 @@ public class OpenSearchVectorCollection(
         throw new NotImplementedException();
     }
 
-    Task<List<Vector>> IVectorCollection.SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken)
+    Task<IReadOnlyList<Vector>> IVectorCollection.SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

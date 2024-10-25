@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace LangChain.Databases;
 
 /// <summary>
@@ -20,4 +22,11 @@ public class VectorCollection(
     /// Collection name provided by client.
     /// </summary>
     public string Name { get; set; } = name;
+
+
+    protected static bool IsValidJsonKey(string input)
+    {
+        // Only allow letters, numbers, and underscores
+        return Regex.IsMatch(input, @"^\w+$");
+    }
 }
