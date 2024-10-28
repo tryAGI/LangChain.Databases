@@ -3,7 +3,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AWSSDK.Kendra" Version="3.7.400.39" />
+    <PackageVersion Include="AWSSDK.Kendra" Version="3.7.400.40" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.25" />
     <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.15.6" />
     <PackageVersion Include="FluentAssertions" Version="6.12.1" />
