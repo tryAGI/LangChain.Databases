@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <NoWarn>$(NoWarn);NETSDK1206;SKEXP0020</NoWarn>
     </PropertyGroup>
 
@@ -28,7 +28,6 @@
     <ItemGroup>
       <PackageReference Include="LangChain.DocumentLoaders.Abstractions" />
       <PackageReference Include="LangChain.Providers.Abstractions" />
-      <PackageReference Include="LangChain.Splitters.Abstractions" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
       <PackageReference Include="Testcontainers" />
       <PackageReference Include="Testcontainers.Elasticsearch" />
