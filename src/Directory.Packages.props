@@ -17,6 +17,7 @@
     <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.15.3-dev.80" />
     <PackageVersion Include="LangChain.Serve.Abstractions" Version="0.15.3-dev.14" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="9.0.0" />
     <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="9.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Milvus" Version="1.29.0-alpha" />
