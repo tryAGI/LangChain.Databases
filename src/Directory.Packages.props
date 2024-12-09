@@ -14,7 +14,7 @@
     </PackageVersion>
     <PackageVersion Include="LangChain.DocumentLoaders.Abstractions" Version="0.15.3-dev.14" />
     <PackageVersion Include="LangChain.Polyfills" Version="0.15.3-dev.14" />
-    <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.15.3-dev.93" />
+    <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.15.3-dev.97" />
     <PackageVersion Include="LangChain.Serve.Abstractions" Version="0.15.3-dev.14" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.Data.Sqlite" Version="9.0.0" />
