@@ -3,7 +3,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AWSSDK.Kendra" Version="3.7.401.1" />
+    <PackageVersion Include="AWSSDK.Kendra" Version="3.7.401.2" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.25" />
     <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.15.10" />
     <PackageVersion Include="FluentAssertions" Version="7.0.0" />
@@ -12,8 +12,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
-    <PackageVersion Include="LangChain.DocumentLoaders.Abstractions" Version="0.15.3-dev.14" />
-    <PackageVersion Include="LangChain.Polyfills" Version="0.15.3-dev.14" />
+    <PackageVersion Include="LangChain.DocumentLoaders.Abstractions" Version="0.15.3-dev.21" />
+    <PackageVersion Include="LangChain.Polyfills" Version="0.15.3-dev.21" />
     <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.15.3-dev.99" />
     <PackageVersion Include="LangChain.Serve.Abstractions" Version="0.15.3-dev.14" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
