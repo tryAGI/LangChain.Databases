@@ -37,7 +37,7 @@
     <PackageVersion Include="Npgsql" Version="8.0.5" />
     <PackageVersion Include="OpenSearch.Client" Version="1.8.0" />
     <PackageVersion Include="Pgvector" Version="0.2.0" />
-    <PackageVersion Include="NUnit" Version="4.3.1" />
+    <PackageVersion Include="NUnit" Version="4.3.2" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />
     <PackageVersion Include="PolySharp" Version="1.15.0">
       <PrivateAssets>all</PrivateAssets>
