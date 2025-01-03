@@ -98,6 +98,7 @@ public class OpenSearchVectorCollection(
         CancellationToken cancellationToken = default)
     {
         settings ??= new VectorSearchSettings();
+        settings.ScoreThreshold ??= 0.0f;
 
         var response = await client.SearchAsync<VectorRecord>(s => s
             .Index(Name)
@@ -115,14 +116,15 @@ public class OpenSearchVectorCollection(
 
         return new VectorSearchResponse
         {
-            Items = response.Documents
-                .Where(vectorRecord => !string.IsNullOrWhiteSpace(vectorRecord.Text))
-                .Select(vectorRecord => new Vector
+            Items = response.Hits
+                .Where(hit => !string.IsNullOrWhiteSpace(hit.Source.Text) && hit.Score >= settings.ScoreThreshold)
+                .Select(hit => new Vector
                 {
-                    Text = vectorRecord.Text ?? string.Empty,
-                    Id = vectorRecord.Id,
-                    Metadata = vectorRecord.Metadata?.ToDictionary(x => x.Key, x => x.Value),
-                    Embedding = vectorRecord.Vector,
+                    Text = hit.Source.Text ?? string.Empty,
+                    Id = hit.Source.Id,
+                    Metadata = hit.Source.Metadata?.ToDictionary(x => x.Key, x => x.Value),
+                    Embedding = hit.Source.Vector,
+                    Distance = (float?)hit.Score ?? 0.0f
                 })
                 .ToArray()
         };
