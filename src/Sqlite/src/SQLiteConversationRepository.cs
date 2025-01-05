@@ -123,7 +123,9 @@ public sealed class SqLiteConversationRepository : IConversationRepository, IDis
                 MessageId = Guid.Parse(reader.GetString(0)),
                 ConversationId = Guid.Parse(reader.GetString(1)),
                 Content = reader.GetString(2),
+#pragma warning disable CA2263
                 Author = (MessageAuthor)Enum.Parse(typeof(MessageAuthor), reader.GetString(3))
+#pragma warning restore CA2263
             });
         }
 
