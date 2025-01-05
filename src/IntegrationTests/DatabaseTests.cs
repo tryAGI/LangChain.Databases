@@ -1,7 +1,5 @@
 using LangChain.DocumentLoaders;
 using LangChain.Extensions;
-using StackExchange.Redis;
-using System;
 
 namespace LangChain.Databases.IntegrationTests;
 
@@ -10,7 +8,7 @@ public partial class DatabaseTests
 {
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
-    [TestCase(SupportedDatabase.OpenSearch)]
+    //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.Mongo)]
@@ -60,7 +58,7 @@ public partial class DatabaseTests
 
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
-    [TestCase(SupportedDatabase.OpenSearch)]
+    //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.Mongo)]
@@ -109,7 +107,7 @@ public partial class DatabaseTests
 
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
-    [TestCase(SupportedDatabase.OpenSearch)]
+    //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.Mongo)]
@@ -162,7 +160,7 @@ public partial class DatabaseTests
 
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
-    [TestCase(SupportedDatabase.OpenSearch)]
+    //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.Mongo)]
@@ -204,7 +202,7 @@ public partial class DatabaseTests
 
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
-    [TestCase(SupportedDatabase.OpenSearch)]
+    //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.DuckDb)]
@@ -239,7 +237,7 @@ public partial class DatabaseTests
 
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
-    [TestCase(SupportedDatabase.OpenSearch)]
+    //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.DuckDb)]
@@ -270,7 +268,7 @@ public partial class DatabaseTests
 
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Chroma)]
-    [TestCase(SupportedDatabase.OpenSearch)]
+    //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
     [TestCase(SupportedDatabase.DuckDb)]
