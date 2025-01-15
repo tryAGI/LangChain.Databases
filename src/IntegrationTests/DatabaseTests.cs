@@ -293,7 +293,7 @@ public partial class DatabaseTests
         first.Text.Should().BeEquivalentTo("lemon");
         if (database is SupportedDatabase.Chroma or SupportedDatabase.Postgres)
         {
-            first.Distance.Should().BeGreaterOrEqualTo(1f);
+            first.Distance.Should().BeGreaterThanOrEqualTo(1f);
         }
     }
 
