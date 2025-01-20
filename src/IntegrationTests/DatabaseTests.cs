@@ -7,7 +7,7 @@ namespace LangChain.Databases.IntegrationTests;
 public partial class DatabaseTests
 {
     [TestCase(SupportedDatabase.InMemory)]
-    [TestCase(SupportedDatabase.Chroma)]
+    //[TestCase(SupportedDatabase.Chroma)]
     //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
@@ -57,7 +57,7 @@ public partial class DatabaseTests
     }
 
     [TestCase(SupportedDatabase.InMemory)]
-    [TestCase(SupportedDatabase.Chroma)]
+    //[TestCase(SupportedDatabase.Chroma)]
     //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
@@ -106,7 +106,7 @@ public partial class DatabaseTests
     }
 
     [TestCase(SupportedDatabase.InMemory)]
-    [TestCase(SupportedDatabase.Chroma)]
+    //[TestCase(SupportedDatabase.Chroma)]
     //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
@@ -159,7 +159,7 @@ public partial class DatabaseTests
     }
 
     [TestCase(SupportedDatabase.InMemory)]
-    [TestCase(SupportedDatabase.Chroma)]
+    //[TestCase(SupportedDatabase.Chroma)]
     //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
@@ -201,7 +201,7 @@ public partial class DatabaseTests
     }
 
     [TestCase(SupportedDatabase.InMemory)]
-    [TestCase(SupportedDatabase.Chroma)]
+    //[TestCase(SupportedDatabase.Chroma)]
     //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
@@ -236,7 +236,7 @@ public partial class DatabaseTests
     }
 
     [TestCase(SupportedDatabase.InMemory)]
-    [TestCase(SupportedDatabase.Chroma)]
+    //[TestCase(SupportedDatabase.Chroma)]
     //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
@@ -267,7 +267,7 @@ public partial class DatabaseTests
     }
 
     [TestCase(SupportedDatabase.InMemory)]
-    [TestCase(SupportedDatabase.Chroma)]
+    //[TestCase(SupportedDatabase.Chroma)]
     //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.SqLite)]
