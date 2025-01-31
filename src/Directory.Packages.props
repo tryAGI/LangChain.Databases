@@ -5,7 +5,7 @@
   <ItemGroup>
     <PackageVersion Include="AWSSDK.Kendra" Version="3.7.401.27" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.25" />
-    <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.15.10" />
+    <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.17.1" />
     <PackageVersion Include="FluentAssertions" Version="8.0.1" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="H.Resources.Generator" Version="1.6.1">
@@ -14,7 +14,7 @@
     </PackageVersion>
     <PackageVersion Include="LangChain.DocumentLoaders.Abstractions" Version="0.16.0" />
     <PackageVersion Include="LangChain.Polyfills" Version="0.16.0" />
-    <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.16.0" />
+    <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.17.0" />
     <PackageVersion Include="LangChain.Serve.Abstractions" Version="0.16.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.Data.Sqlite" Version="9.0.1" />
