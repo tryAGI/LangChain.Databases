@@ -29,7 +29,7 @@
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Redis" Version="1.32.0-preview" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Sqlite" Version="1.32.0-preview" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Weaviate" Version="1.32.0-preview" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Core" Version="1.35.0" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Core" Version="1.36.0" />
     <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.MSTest" Version="1.1.2" />
     <PackageVersion Include="Verify.MSTest" Version="26.1.6" />
@@ -45,15 +45,15 @@
     </PackageVersion>
     <PackageVersion Include="StackExchange.Redis" Version="2.8.16" />
     <PackageVersion Include="System.Linq.Async" Version="6.0.1" />
-    <PackageVersion Include="System.Memory.Data" Version="9.0.1" />
-    <PackageVersion Include="System.Text.Json" Version="9.0.1" />
+    <PackageVersion Include="System.Memory.Data" Version="9.0.2" />
+    <PackageVersion Include="System.Text.Json" Version="9.0.2" />
     <PackageVersion Include="Testcontainers" Version="4.2.0" />
     <PackageVersion Include="Testcontainers.Milvus" Version="4.2.0" />
     <PackageVersion Include="Testcontainers.MongoDb" Version="4.2.0" />
     <PackageVersion Include="Testcontainers.Elasticsearch" Version="4.2.0" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="4.2.0" />
     <PackageVersion Include="Testcontainers.Redis" Version="4.2.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.0" />
     <PackageVersion Include="MinVer" Version="6.0.0">
