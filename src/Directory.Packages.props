@@ -17,9 +17,9 @@
     <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.17.0" />
     <PackageVersion Include="LangChain.Serve.Abstractions" Version="0.17.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
-    <PackageVersion Include="Microsoft.Data.Sqlite" Version="9.0.1" />
-    <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="9.0.1" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="9.0.2" />
+    <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="9.0.2" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Milvus" Version="1.32.0-alpha" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Chroma" Version="1.32.0-alpha" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.DuckDB" Version="1.32.0-alpha" />
@@ -38,7 +38,7 @@
     <PackageVersion Include="OpenSearch.Client" Version="1.8.0" />
     <PackageVersion Include="Pgvector" Version="0.2.0" />
     <PackageVersion Include="NUnit" Version="4.3.2" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="5.0.0" />
     <PackageVersion Include="PolySharp" Version="1.15.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
