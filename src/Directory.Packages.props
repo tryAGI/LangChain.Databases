@@ -6,7 +6,7 @@
     <PackageVersion Include="AWSSDK.Kendra" Version="3.7.401.27" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.25" />
     <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.17.1" />
-    <PackageVersion Include="FluentAssertions" Version="8.0.1" />
+    <PackageVersion Include="FluentAssertions" Version="8.1.0" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="H.Resources.Generator" Version="1.6.1">
       <PrivateAssets>all</PrivateAssets>
@@ -29,7 +29,7 @@
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Redis" Version="1.32.0-preview" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Sqlite" Version="1.32.0-preview" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Weaviate" Version="1.32.0-preview" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Core" Version="1.36.1" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Core" Version="1.37.0" />
     <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.MSTest" Version="1.1.2" />
     <PackageVersion Include="Verify.MSTest" Version="26.1.6" />
