@@ -71,9 +71,22 @@ public class SemanticKernelMemoryStoreCollection(IMemoryStore store,
     {
         request = request ?? throw new ArgumentNullException(nameof(request));
         settings ??= new VectorSearchSettings();
-        var results = await store.GetNearestMatchesAsync(Name, request.Embeddings.First(), limit: settings.NumberOfResults, cancellationToken: cancellationToken)
+        var results = await store.GetNearestMatchesAsync(Name, request.Embeddings.First(), limit: settings.NumberOfResults, cancellationToken: cancellationToken, minRelevanceScore: settings.ScoreThreshold ?? 0)
             .ToListAsync(cancellationToken).ConfigureAwait(false);
-        return new VectorSearchResponse { Items = results.Select(x => new Vector { Text = x.Item1.Metadata.ExternalSourceName }).ToList() };
+        return new VectorSearchResponse { Items = results.Select(x => new Vector
+            { 
+                Text = x.Item1.Metadata.ExternalSourceName,
+                Metadata = !string.IsNullOrEmpty(x.Item1.Metadata.AdditionalMetadata) 
+                    ? x.Item1.Metadata.AdditionalMetadata
+                      .Split('#')
+                      .Where(part => !string.IsNullOrEmpty(part) && part.Contains('&'))
+                      .Select(part => part.Split('&'))
+                      .Where(split => split.Length == 2)
+                      .ToDictionary(split => split[0], split => (object)split[1])
+                    : null,
+                RelevanceScore = (float)x.Item2
+            }).ToList()
+        };
     }
 
     Task<IReadOnlyList<Vector>> IVectorCollection.SearchByMetadata(Dictionary<string, object> filters, CancellationToken cancellationToken)
