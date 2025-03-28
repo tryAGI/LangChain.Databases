@@ -76,10 +76,14 @@ public class SemanticKernelMemoryStoreCollection(IMemoryStore store,
         return new VectorSearchResponse { Items = results.Select(x => new Vector
             { 
                 Text = x.Item1.Metadata.ExternalSourceName,
-                Metadata = x.Item1.Metadata.AdditionalMetadata
-                .Split('#')
-                .Select(part => part.Split('&'))
-                .ToDictionary(split => split[0], split => (object)split[1]),
+                Metadata = !string.IsNullOrEmpty(x.Item1.Metadata.AdditionalMetadata) 
+                    ? x.Item1.Metadata.AdditionalMetadata
+                      .Split('#')
+                      .Where(part => !string.IsNullOrEmpty(part) && part.Contains('&'))
+                      .Select(part => part.Split('&'))
+                      .Where(split => split.Length == 2)
+                      .ToDictionary(split => split[0], split => (object)split[1])
+                    : null,
                 RelevanceScore = (float)x.Item2
             }).ToList()
         };
