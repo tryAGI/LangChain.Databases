@@ -76,6 +76,7 @@ public class PostgresVectorCollection(
                 request.Embeddings.First(),
                 settings.DistanceStrategy,
                 limit: settings.NumberOfResults,
+                minRelevanceScore: settings.ScoreThreshold ?? 0D,
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
