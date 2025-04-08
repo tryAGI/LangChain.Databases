@@ -25,6 +25,15 @@ public class OpenSearchVectorDatabase : IVectorDatabase
         _client = new OpenSearchClient(settings);
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="OpenSearchVectorDatabase"/> class.
+    /// </summary>
+    /// <param name="client">The OpenSearch client.</param>
+    public OpenSearchVectorDatabase(OpenSearchClient client)
+    {
+        _client = client;
+    }
+
     /// <inheritdoc />
     public async Task CreateCollectionAsync(string collectionName, int dimensions, CancellationToken cancellationToken = default)
     {
