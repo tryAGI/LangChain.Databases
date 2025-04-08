@@ -7,7 +7,7 @@ namespace LangChain.Databases.OpenSearch;
 /// Represents a vector collection using OpenSearch.
 /// </summary>
 public class OpenSearchVectorCollection(
-    OpenSearchClient client,
+    IOpenSearchClient client,
     string name,
     string id) : VectorCollection(name, id), IVectorCollection
 {
