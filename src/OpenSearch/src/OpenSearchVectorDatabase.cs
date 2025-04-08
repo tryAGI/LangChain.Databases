@@ -7,7 +7,7 @@ namespace LangChain.Databases.OpenSearch;
 /// </summary>
 public class OpenSearchVectorDatabase : IVectorDatabase
 {
-    private readonly OpenSearchClient _client;
+    private readonly IOpenSearchClient _client;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OpenSearchVectorDatabase"/> class.
@@ -23,6 +23,15 @@ public class OpenSearchVectorDatabase : IVectorDatabase
             .BasicAuthentication(options.Username, options.Password);
 
         _client = new OpenSearchClient(settings);
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="OpenSearchVectorDatabase"/> class.
+    /// </summary>
+    /// <param name="client">The OpenSearch client.</param>
+    public OpenSearchVectorDatabase(IOpenSearchClient client)
+    {
+        _client = client;
     }
 
     /// <inheritdoc />
