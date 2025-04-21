@@ -73,10 +73,12 @@ public class SemanticKernelMemoryStoreCollection(IMemoryStore store,
         settings ??= new VectorSearchSettings();
         var results = await store.GetNearestMatchesAsync(Name, request.Embeddings.First(), limit: settings.NumberOfResults, cancellationToken: cancellationToken, minRelevanceScore: settings.ScoreThreshold ?? 0)
             .ToListAsync(cancellationToken).ConfigureAwait(false);
-        return new VectorSearchResponse { Items = results.Select(x => new Vector
-            { 
+        return new VectorSearchResponse
+        {
+            Items = results.Select(x => new Vector
+            {
                 Text = x.Item1.Metadata.ExternalSourceName,
-                Metadata = !string.IsNullOrEmpty(x.Item1.Metadata.AdditionalMetadata) 
+                Metadata = !string.IsNullOrEmpty(x.Item1.Metadata.AdditionalMetadata)
                     ? x.Item1.Metadata.AdditionalMetadata
                       .Split('#')
                       .Where(part => !string.IsNullOrEmpty(part) && part.Contains('&'))
