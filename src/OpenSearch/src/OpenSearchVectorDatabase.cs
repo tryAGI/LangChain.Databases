@@ -40,7 +40,6 @@ public class OpenSearchVectorDatabase : IVectorDatabase
         var response = await _client.Indices.CreateAsync(collectionName, c => c
             .Settings(x => x
                 .Setting("index.knn", true)
-                .Setting("index.knn.space_type", "cosinesimil")
             )
             .Map<VectorRecord>(m => m
                 .Properties(p => p
