@@ -10,7 +10,7 @@ Database and vector store abstractions for the LangChain .NET ecosystem. Provide
 
 ```bash
 # Build the entire solution
-dotnet build LangChain.Databases.sln
+dotnet build LangChain.Databases.slnx
 
 # Run integration tests (requires Docker for Testcontainers-based backends)
 dotnet test src/IntegrationTests/LangChain.Databases.IntegrationTests.csproj
