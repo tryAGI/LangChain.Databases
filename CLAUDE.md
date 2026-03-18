@@ -49,8 +49,6 @@ src/
 ├── Kendra/src/                # AWS Kendra
 ├── SemanticKernel/src/        # Bridge to Microsoft Semantic Kernel vector stores
 ├── IntegrationTests/          # Tests covering all backends
-└── Helpers/
-    └── GenerateDocs/          # Documentation generation
 ```
 
 ### Core Abstractions (src/Abstractions/src/)
