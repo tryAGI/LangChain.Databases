@@ -18,8 +18,8 @@ dotnet test src/IntegrationTests/LangChain.Databases.IntegrationTests.csproj
 # Run a specific test
 dotnet test src/IntegrationTests/LangChain.Databases.IntegrationTests.csproj --filter "FullyQualifiedName~Sqlite"
 
-# Validate trimming/NativeAOT compatibility
-dotnet build src/Helpers/TrimmingHelper/TrimmingHelper.csproj
+# Validate trimming/NativeAOT compatibility (requires: dotnet tool install -g autosdk.cli --prerelease)
+autosdk trim src/libs/*//*.csproj
 ```
 
 Integration tests for server-based backends (Postgres, Mongo, Redis, Elasticsearch, Milvus) use Testcontainers to spin up Docker instances.
@@ -50,8 +50,7 @@ src/
 ├── SemanticKernel/src/        # Bridge to Microsoft Semantic Kernel vector stores
 ├── IntegrationTests/          # Tests covering all backends
 └── Helpers/
-    ├── GenerateDocs/          # Documentation generation
-    └── TrimmingHelper/        # Trimming/NativeAOT check
+    └── GenerateDocs/          # Documentation generation
 ```
 
 ### Core Abstractions (src/Abstractions/src/)
