@@ -9,7 +9,7 @@
         <PackageReference Include="Microsoft.NET.Test.Sdk" />
         <PackageReference Include="NUnit" />
         <PackageReference Include="NUnit3TestAdapter" />
-        <PackageReference Include="FluentAssertions" />
+        <PackageReference Include="AwesomeAssertions" />
         <PackageReference Include="GitHubActionsTestLogger">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -23,7 +23,7 @@
 
     <ItemGroup Label="GlobalUsings">
         <Using Include="NUnit.Framework" />
-        <Using Include="FluentAssertions" />
+        <Using Include="AwesomeAssertions" />
     </ItemGroup>
 
 </Project>
