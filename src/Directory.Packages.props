@@ -3,9 +3,9 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AWSSDK.Kendra" Version="3.7.401.27" />
+    <PackageVersion Include="AWSSDK.Kendra" Version="4.0.0.20" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.25" />
-    <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.17.1" />
+    <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="9.3.3" />
     <PackageVersion Include="AwesomeAssertions" Version="9.4.0" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="H.Resources.Generator" Version="1.6.1">
@@ -34,7 +34,7 @@
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.MSTest" Version="1.1.2" />
     <PackageVersion Include="Verify.MSTest" Version="26.1.6" />
     <PackageVersion Include="Verify.SourceGenerators" Version="2.3.0" />
-    <PackageVersion Include="Npgsql" Version="8.0.5" />
+    <PackageVersion Include="Npgsql" Version="10.0.1" />
     <PackageVersion Include="OpenSearch.Client" Version="1.8.0" />
     <PackageVersion Include="Pgvector" Version="0.2.0" />
     <PackageVersion Include="NUnit" Version="4.5.1" />
