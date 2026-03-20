@@ -327,6 +327,7 @@ public class OpenSearchVectorStoreCollection<TRecord> :
         {
             response = await _client.SearchAsync<VectorRecord>(s => s
                 .Index(_name)
+                .Size(top)
                 .Query(q => q
                     .Knn(knn => knn
                         .Field(f => f.Vector)
