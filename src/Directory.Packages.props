@@ -24,9 +24,10 @@
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Chroma" Version="1.67.0-alpha" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.DuckDB" Version="1.53.1-alpha" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.AzureAISearch" Version="1.70.0-preview" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Pinecone" Version="1.32.0-preview" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.32.0-preview" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Redis" Version="1.32.0-preview" />
+    <PackageVersion Include="Microsoft.Extensions.VectorData.Abstractions" Version="10.1.0" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Pinecone" Version="1.74.0-preview" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.74.0-preview" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Redis" Version="1.74.0-preview" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Sqlite" Version="1.51.0-preview" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Weaviate" Version="1.32.0-preview" />
     <PackageVersion Include="Microsoft.SemanticKernel.Core" Version="1.72.0" />
@@ -53,7 +54,7 @@
     <PackageVersion Include="Testcontainers.Elasticsearch" Version="4.11.0" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="4.11.0" />
     <PackageVersion Include="Testcontainers.Redis" Version="4.11.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.4" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.2" />
     <PackageVersion Include="MinVer" Version="6.0.0">
