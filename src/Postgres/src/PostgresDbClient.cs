@@ -1,4 +1,4 @@
-using LangChain.Databases.JsonConverters;
+using LangChain.Databases.Postgres.JsonConverters;
 using Npgsql;
 using NpgsqlTypes;
 using System.Data;
@@ -188,6 +188,67 @@ DO UPDATE SET content=@content, metadata=@metadata, embedding=@embedding, timest
             cmd.Parameters.AddWithValue("@timestamp", NpgsqlDbType.TimestampTz, timestamp ?? (object)DBNull.Value);
 
             await cmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Batch insert or update records in a single transaction.
+    /// </summary>
+    public async Task UpsertBatchAsync(
+        string tableName,
+        IReadOnlyList<(string Id, string Content, IReadOnlyDictionary<string, object>? Metadata, ReadOnlyMemory<float>? Embedding, DateTime? Timestamp)> records,
+        CancellationToken cancellationToken = default)
+    {
+        if (records.Count == 0)
+        {
+            return;
+        }
+
+        var connection = await _dataSource.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+
+        await using (connection)
+        {
+            await using var transaction = await connection.BeginTransactionAsync(cancellationToken).ConfigureAwait(false);
+
+            try
+            {
+                var fullTableName = GetFullTableName(tableName);
+
+                for (var i = 0; i < records.Count; i++)
+                {
+                    var (id, content, metadata, embedding, timestamp) = records[i];
+
+                    using var cmd = connection.CreateCommand();
+                    cmd.Transaction = transaction;
+
+                    cmd.CommandText = $@"
+INSERT INTO {fullTableName} (id, content, metadata, embedding, timestamp)
+VALUES(@id, @content, @metadata, @embedding, @timestamp)
+ON CONFLICT (id)
+DO UPDATE SET content=@content, metadata=@metadata, embedding=@embedding, timestamp=@timestamp;";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@content", content);
+
+                    var metadataString = metadata != null
+                        ? JsonSerializer.Serialize(metadata, _jsonSerializerOptions)
+                        : (object)DBNull.Value;
+                    cmd.Parameters.AddWithValue("@metadata", NpgsqlDbType.Jsonb, metadataString);
+
+                    var vector = embedding != null ? new Pgvector.Vector(embedding.Value) : (object)DBNull.Value;
+                    cmd.Parameters.AddWithValue("@embedding", vector);
+                    cmd.Parameters.AddWithValue("@timestamp", NpgsqlDbType.TimestampTz, timestamp ?? (object)DBNull.Value);
+
+                    await cmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+                }
+
+                await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);
+                throw;
+            }
         }
     }
 

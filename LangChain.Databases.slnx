@@ -3,32 +3,8 @@
     <File Path="src/Abstractions/README.md" />
     <Project Path="src/Abstractions/src/LangChain.Databases.Abstractions.csproj" />
   </Folder>
-  <Folder Name="/AzureCognitiveSearch/">
-    <Project Path="src/AzureCognitiveSearch/src/LangChain.Databases.AzureCognitiveSearch.csproj" />
-  </Folder>
-  <Folder Name="/AzureSearch/">
-    <Project Path="src/AzureSearch/src/LangChain.Databases.AzureSearch.csproj" />
-  </Folder>
-  <Folder Name="/Chroma/">
-    <Project Path="src/Chroma/src/LangChain.Databases.Chroma.csproj" />
-  </Folder>
-  <Folder Name="/DuckDb/">
-    <Project Path="src/DuckDb/src/LangChain.Databases.DuckDb.csproj" />
-  </Folder>
-  <Folder Name="/Elasticsearch/">
-    <Project Path="src/Elasticsearch/src/LangChain.Databases.Elasticsearch.csproj" />
-  </Folder>
-  <Folder Name="/InMemory/">
-    <Project Path="src/InMemory/src/LangChain.Databases.InMemory.csproj" />
-  </Folder>
   <Folder Name="/IntegrationTests/">
     <Project Path="src/IntegrationTests/LangChain.Databases.IntegrationTests.csproj" />
-  </Folder>
-  <Folder Name="/Kendra/">
-    <Project Path="src/Kendra/src/LangChain.Databases.Kendra.csproj" />
-  </Folder>
-  <Folder Name="/Milvus/">
-    <Project Path="src/Milvus/src/LangChain.Databases.Milvus.csproj" />
   </Folder>
   <Folder Name="/Misc/">
     <File Path=".gitignore" />
@@ -62,25 +38,10 @@
   <Folder Name="/OpenSearch/">
     <Project Path="src/OpenSearch/src/LangChain.Databases.OpenSearch.csproj" />
   </Folder>
-  <Folder Name="/Pinecone/">
-    <Project Path="src/Pinecone/src/LangChain.Databases.Pinecone.csproj" />
-  </Folder>
   <Folder Name="/Postgres/">
     <Project Path="src/Postgres/src/LangChain.Databases.Postgres.csproj" />
   </Folder>
-  <Folder Name="/Qdrant/">
-    <Project Path="src/Qdrant/src/LangChain.Databases.Qdrant.csproj" />
-  </Folder>
   <Folder Name="/Redis/">
     <Project Path="src/Redis/src/LangChain.Databases.Redis.csproj" />
-  </Folder>
-  <Folder Name="/SemanticKernel/">
-    <Project Path="src/SemanticKernel/src/LangChain.Databases.SemanticKernel.csproj" />
-  </Folder>
-  <Folder Name="/Sqlite/">
-    <Project Path="src/Sqlite/src/LangChain.Databases.Sqlite.csproj" />
-  </Folder>
-  <Folder Name="/Weaviate/">
-    <Project Path="src/Weaviate/src/LangChain.Databases.Weaviate.csproj" />
   </Folder>
 </Solution>

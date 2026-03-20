@@ -1,22 +1,8 @@
 using DotNet.Testcontainers.Builders;
-using Elastic.Clients.Elasticsearch;
-using LangChain.Databases.Chroma;
-using LangChain.Databases.Elasticsearch;
-using LangChain.Databases.InMemory;
-using LangChain.Databases.Milvus;
-using LangChain.Databases.Mongo;
 using LangChain.Databases.OpenSearch;
 using LangChain.Databases.Postgres;
-using LangChain.Databases.Sqlite;
-using Testcontainers.Elasticsearch;
-using LangChain.Databases.DuckDb;
-using Microsoft.SemanticKernel.Connectors.DuckDB;
-using Microsoft.SemanticKernel.Connectors.Milvus;
-using Testcontainers.MongoDb;
+using Microsoft.SemanticKernel.Connectors.InMemory;
 using Testcontainers.PostgreSql;
-using LangChain.Databases.Weaviate;
-using Microsoft.SemanticKernel.Connectors.Weaviate;
-using Testcontainers.Milvus;
 
 namespace LangChain.Databases.IntegrationTests;
 
@@ -30,38 +16,9 @@ public partial class DatabaseTests
                 {
                     return new DatabaseTestEnvironment
                     {
-                        VectorDatabase = new InMemoryVectorDatabase(),
+                        VectorStore = new InMemoryVectorStore(),
                     };
                 }
-            case SupportedDatabase.Chroma:
-                {
-                    var port = Random.Shared.Next(49152, 65535);
-                    var container = new ContainerBuilder()
-                        .WithImage("chromadb/chroma")
-                        .WithPortBinding(hostPort: port, containerPort: 8000)
-                        .Build();
-
-                    await container.StartAsync(cancellationToken);
-
-                    return new DatabaseTestEnvironment
-                    {
-                        VectorDatabase = new ChromaVectorDatabase(
-                            new HttpClient(),
-                            $"http://localhost:{port}"),
-                        Container = container,
-                        Port = port,
-                    };
-                }
-            case SupportedDatabase.SqLite:
-                {
-                    return new DatabaseTestEnvironment
-                    {
-                        VectorDatabase = new SqLiteVectorDatabase(dataSource: ":memory:"),
-                    };
-                }
-            // In order to run tests please run postgres with installed pgvector locally
-            // e.g. with docker <see href="https://github.com/pgvector/pgvector#additional-installation-methods"/>
-            // docker run -p 5433:5432 -e POSTGRES_PASSWORD=password -e POSTGRES_DB=test ankane/pgvector
             case SupportedDatabase.Postgres:
                 {
                     var port = Random.Shared.Next(49152, 65535);
@@ -77,7 +34,7 @@ public partial class DatabaseTests
 
                     return new DatabaseTestEnvironment
                     {
-                        VectorDatabase = new PostgresVectorDatabase(container.GetConnectionString()),
+                        VectorStore = new PostgresVectorStore(container.GetConnectionString()),
                         Container = container,
                     };
                 }
@@ -89,8 +46,8 @@ public partial class DatabaseTests
                     var port2 = Random.Shared.Next(49152, 65535);
                     var container = new ContainerBuilder()
                         .WithImage("opensearchproject/opensearch:latest")
-                        .WithPortBinding(hostPort: port1, containerPort: 9600) // multiple ports can be not supported
-                        .WithPortBinding(hostPort: port2, containerPort: 9200) // multiple ports can be not supported
+                        .WithPortBinding(hostPort: port1, containerPort: 9600)
+                        .WithPortBinding(hostPort: port2, containerPort: 9200)
                         .WithEnvironment("discovery.type", "single-node")
                         .WithEnvironment("plugins.security.disabled", "true")
                         .WithEnvironment("OPENSEARCH_INITIAL_ADMIN_PASSWORD", password)
@@ -100,7 +57,7 @@ public partial class DatabaseTests
 
                     return new DatabaseTestEnvironment
                     {
-                        VectorDatabase = new OpenSearchVectorDatabase(new OpenSearchVectorDatabaseOptions
+                        VectorStore = new OpenSearchVectorStore(new OpenSearchVectorDatabaseOptions
                         {
                             ConnectionUri = new Uri($"http://localhost:{port2}"),
                             Username = "admin",
@@ -108,75 +65,6 @@ public partial class DatabaseTests
                         }),
                         Container = container,
                         Port = port2,
-                    };
-                }
-
-            case SupportedDatabase.Mongo:
-                {
-                    var port = Random.Shared.Next(49152, 65535);
-                    var container = new MongoDbBuilder()
-                        .WithImage("mongo")
-                        .WithPortBinding(hostPort: port, containerPort: 27017)
-                        .Build();
-
-                    await container.StartAsync(cancellationToken);
-
-                    return new DatabaseTestEnvironment
-                    {
-                        VectorDatabase = new MongoVectorDatabase(container.GetConnectionString()),
-                        Container = container,
-                    };
-                }
-            case SupportedDatabase.DuckDb:
-                var store = await DuckDBMemoryStore.ConnectAsync(cancellationToken);
-                return new DatabaseTestEnvironment
-                {
-                    VectorDatabase = new DuckDbVectorDatabase(store)
-                };
-            case SupportedDatabase.Elasticsearch:
-                {
-                    var container = new ElasticsearchBuilder().Build();
-
-                    await container.StartAsync(cancellationToken);
-
-                    var client = new ElasticsearchClient(new Uri($"http://localhost:{container.GetMappedPublicPort(9200)}"));
-                    return new DatabaseTestEnvironment
-                    {
-                        VectorDatabase = new ElasticsearchVectorDatabase(client),
-                        Container = container,
-                    };
-                }
-            case SupportedDatabase.Milvus:
-                {
-                    var container = new MilvusBuilder().Build();
-
-                    await container.StartAsync(cancellationToken);
-
-                    return new DatabaseTestEnvironment
-                    {
-                        VectorDatabase = new MilvusVectorDatabase(new MilvusMemoryStore("localhost", port: container.GetMappedPublicPort(19530))),
-                        Container = container,
-                    };
-                }
-            case SupportedDatabase.Weaviate:
-                {
-                    var port1 = Random.Shared.Next(49152, 65535);
-                    var port2 = Random.Shared.Next(49152, 65535);
-                    var container = new ContainerBuilder()
-                        .WithImage("cr.weaviate.io/semitechnologies/weaviate:1.25.10")
-                        .WithPortBinding(hostPort: port1, containerPort: 8080)
-                        .WithPortBinding(hostPort: port2, containerPort: 50051)
-                        .WithEnvironment("AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED", "true")
-                        .Build();
-
-                    await container.StartAsync(cancellationToken);
-
-                    await Task.Delay(5000, cancellationToken);
-
-                    return new DatabaseTestEnvironment
-                    {
-                        VectorDatabase = new WeaviateVectorDatabase(new WeaviateMemoryStore($"http://localhost:{port1}")),
-                        Container = container
                     };
                 }
             default:

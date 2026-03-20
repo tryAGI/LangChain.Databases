@@ -1,6 +1,9 @@
 site_name: LangChain .NET Databases Documentation
 nav:
 - Overview: index.md
+- Guides:
+  - Migration to MEVA: guides/migration-to-meva.md
+  - Observability: guides/observability.md
 # EXAMPLES #
 
 #  - Quick Start: QuickStart.md

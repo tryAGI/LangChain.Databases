@@ -1,4 +1,3 @@
-using DotNet.Testcontainers.Builders;
 using LangChain.Databases.Mongo;
 using LangChain.Databases.Mongo.Client;
 using LangChain.Memory;
@@ -26,22 +25,6 @@ public partial class HistoryTests
                     {
                         History = await FileChatMessageHistory.CreateAsync(Path.GetTempFileName(), cancellationToken),
                     };
-                }
-            case SupportedDatabase.Chroma:
-                {
-                    throw new NotImplementedException();
-                }
-            case SupportedDatabase.SqLite:
-                {
-                    throw new NotImplementedException();
-                }
-            case SupportedDatabase.Postgres:
-                {
-                    throw new NotImplementedException();
-                }
-            case SupportedDatabase.OpenSearch:
-                {
-                    throw new NotImplementedException();
                 }
             case SupportedDatabase.Mongo:
                 {

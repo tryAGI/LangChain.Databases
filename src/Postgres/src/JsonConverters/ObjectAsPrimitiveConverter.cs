@@ -3,7 +3,7 @@ using System.Dynamic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace LangChain.Databases.JsonConverters;
+namespace LangChain.Databases.Postgres.JsonConverters;
 
 /// <inheritdoc />
 /// According: https://stackoverflow.com/questions/65972825/c-sharp-deserializing-nested-json-to-nested-dictionarystring-object

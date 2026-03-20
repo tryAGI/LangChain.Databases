@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFrameworks>net4.7.2;netstandard2.1;net8.0;net9.0</TargetFrameworks>
@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">
-        <Description>Mongo Database support for LangChain.</Description>
+        <Description>Mongo chat message history for LangChain.</Description>
         <PackageTags>$(PackageTags);mongo</PackageTags>
     </PropertyGroup>
 
@@ -16,7 +16,7 @@
         <PackageReference Include="MongoDB.Driver" />
         <PackageReference Include="System.Text.Json" />
     </ItemGroup>
-    
+
     <ItemGroup>
         <ProjectReference Include="..\..\Abstractions\src\LangChain.Databases.Abstractions.csproj" />
     </ItemGroup>

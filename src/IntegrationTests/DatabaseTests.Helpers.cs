@@ -1,5 +1,3 @@
-using LangChain.Providers;
-using Moq;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace LangChain.Databases.IntegrationTests;
@@ -7,38 +5,6 @@ namespace LangChain.Databases.IntegrationTests;
 public partial class DatabaseTests
 {
     public static Dictionary<string, float[]> Embeddings { get; } = LoadEmbeddings();
-
-    internal static Mock<IEmbeddingModel> CreateEmbeddingModelMock()
-    {
-        var mock = new Mock<IEmbeddingModel>();
-
-        mock.Setup(x => x.CreateEmbeddingsAsync(
-                It.IsAny<EmbeddingRequest>(),
-                It.IsAny<EmbeddingSettings>(),
-                It.IsAny<CancellationToken>()))
-            .Returns<EmbeddingRequest, EmbeddingSettings, CancellationToken>(
-                (request, _, _) =>
-                {
-                    var embeddings = new float[request.Strings.Count][];
-
-                    for (var index = 0; index < request.Strings.Count; index++)
-                    {
-                        var text = request.Strings[index];
-                        embeddings[index] = Embeddings.TryGetValue(text, out var value)
-                            ? value
-                            : throw new ArgumentException("not in dict");
-                    }
-
-                    return Task.FromResult(new EmbeddingResponse
-                    {
-                        Values = embeddings,
-                        Usage = Usage.Empty,
-                        UsedSettings = EmbeddingSettings.Default,
-                    });
-                });
-
-        return mock;
-    }
 
     internal static Dictionary<string, float[]> LoadEmbeddings()
     {

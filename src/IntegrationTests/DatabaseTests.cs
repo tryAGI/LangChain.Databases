@@ -1,5 +1,4 @@
-using LangChain.DocumentLoaders;
-using LangChain.Extensions;
+using Microsoft.Extensions.VectorData;
 
 namespace LangChain.Databases.IntegrationTests;
 
@@ -7,359 +6,222 @@ namespace LangChain.Databases.IntegrationTests;
 public partial class DatabaseTests
 {
     [TestCase(SupportedDatabase.InMemory)]
-    //[TestCase(SupportedDatabase.Chroma)]
-    //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
-    [TestCase(SupportedDatabase.SqLite)]
-    [TestCase(SupportedDatabase.Mongo)]
-    [TestCase(SupportedDatabase.DuckDb)]
-    //[TestCase(SupportedDatabase.Weaviate)]
-    //[TestCase(SupportedDatabase.Elasticsearch)]
-    //[TestCase(SupportedDatabase.Milvus)]
+    [TestCase(SupportedDatabase.OpenSearch)]
     public async Task CreateAndDeleteCollection_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
-        var vectorDatabase = environment.VectorDatabase;
+        var store = environment.VectorStore;
 
-        var exists = await vectorDatabase.IsCollectionExistsAsync(environment.CollectionName);
+        var exists = await store.CollectionExistsAsync(environment.CollectionName);
         exists.Should().BeFalse();
 
-        var collections = await vectorDatabase.ListCollectionsAsync();
-        collections.Should().BeEmpty();
+        var collection = store.GetCollection<string, TestVectorRecord>(environment.CollectionName);
+        await collection.EnsureCollectionExistsAsync();
 
-        // ReSharper disable once AccessToDisposedClosure
-        await vectorDatabase.Invoking(y => y.GetCollectionAsync(environment.CollectionName))
-            .Should().ThrowAsync<InvalidOperationException>();
-
-        var actual = await vectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
-
-        actual.Should().NotBeNull();
-        actual.Id.Should().NotBeEmpty();
-        actual.Name.Should().BeEquivalentTo(environment.CollectionName);
-
-        exists = await vectorDatabase.IsCollectionExistsAsync(environment.CollectionName);
+        exists = await store.CollectionExistsAsync(environment.CollectionName);
         exists.Should().BeTrue();
 
-        collections = await vectorDatabase.ListCollectionsAsync();
-        collections.Should().BeEquivalentTo([environment.CollectionName]);
+        var names = new List<string>();
+        await foreach (var name in store.ListCollectionNamesAsync())
+        {
+            names.Add(name);
+        }
+        names.Should().Contain(environment.CollectionName);
 
-        await vectorDatabase.DeleteCollectionAsync(environment.CollectionName);
+        await store.EnsureCollectionDeletedAsync(environment.CollectionName);
 
-        // ReSharper disable once AccessToDisposedClosure
-        await vectorDatabase.Invoking(y => y.GetCollectionAsync(environment.CollectionName))
-            .Should().ThrowAsync<InvalidOperationException>();
-
-        exists = await vectorDatabase.IsCollectionExistsAsync(environment.CollectionName);
+        exists = await store.CollectionExistsAsync(environment.CollectionName);
         exists.Should().BeFalse();
-
-        collections = await vectorDatabase.ListCollectionsAsync();
-        collections.Should().BeEmpty();
     }
 
     [TestCase(SupportedDatabase.InMemory)]
-    //[TestCase(SupportedDatabase.Chroma)]
-    //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
-    [TestCase(SupportedDatabase.SqLite)]
-    [TestCase(SupportedDatabase.Mongo)]
-    [TestCase(SupportedDatabase.DuckDb)]
-    [TestCase(SupportedDatabase.Weaviate)]
-    //[TestCase(SupportedDatabase.Elasticsearch)]
-    [TestCase(SupportedDatabase.Milvus)]
-    public async Task AddDocuments_Ok(SupportedDatabase database)
+    [TestCase(SupportedDatabase.OpenSearch)]
+    public async Task UpsertAndGet_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
-        var vectorDatabase = environment.VectorDatabase;
-        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
+        var collection = environment.VectorStore.GetCollection<string, TestVectorRecord>(environment.CollectionName);
+        await collection.EnsureCollectionExistsAsync();
 
-        var documents = new[]
+        var record1 = new TestVectorRecord
         {
-            new Document("apple", new Dictionary<string, object>
-            {
-                ["color"] = "red"
-            }),
-            new Document("orange", new Dictionary<string, object>
-            {
-                ["color"] = "orange"
-            })
+            Text = "apple",
+            Color = "red",
+            Embedding = Embeddings["apple"],
+        };
+        var record2 = new TestVectorRecord
+        {
+            Text = "orange",
+            Color = "orange",
+            Embedding = Embeddings["orange"],
         };
 
-        var ids = await vectorCollection.AddDocumentsAsync(environment.EmbeddingModel, documents);
+        await collection.UpsertAsync(record1);
+        await collection.UpsertAsync(record2);
 
-        ids.Should().HaveCount(2);
+        var retrieved1 = await collection.GetAsync(record1.Id);
+        retrieved1.Should().NotBeNull();
+        retrieved1!.Text.Should().Be("apple");
 
-        var firstId = ids.First();
-        var secondId = ids.Skip(1).First();
-
-        firstId.Should().NotBeEmpty();
-        secondId.Should().NotBeEmpty();
-
-        var actualFirstDocument = await vectorCollection.GetDocumentByIdAsync(firstId);
-        actualFirstDocument.Should().NotBeNull();
-        actualFirstDocument!.PageContent.Should().BeEquivalentTo(documents[0].PageContent);
-        actualFirstDocument.Metadata["color"].Should().BeEquivalentTo(documents[0].Metadata["color"]);
-
-        var actualSecondDocument = await vectorCollection.GetDocumentByIdAsync(secondId);
-        actualSecondDocument.Should().NotBeNull();
-        actualSecondDocument!.PageContent.Should().BeEquivalentTo(documents[1].PageContent);
-        actualSecondDocument.Metadata["color"].Should().BeEquivalentTo(documents[1].Metadata["color"]);
+        var retrieved2 = await collection.GetAsync(record2.Id);
+        retrieved2.Should().NotBeNull();
+        retrieved2!.Text.Should().Be("orange");
     }
 
     [TestCase(SupportedDatabase.InMemory)]
-    //[TestCase(SupportedDatabase.Chroma)]
-    //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
-    [TestCase(SupportedDatabase.SqLite)]
-    [TestCase(SupportedDatabase.Mongo)]
-    [TestCase(SupportedDatabase.DuckDb)]
-    [TestCase(SupportedDatabase.Weaviate)]
-    //[TestCase(SupportedDatabase.Elasticsearch)]
-    //[TestCase(SupportedDatabase.Milvus)]
-    public async Task AddTexts_Ok(SupportedDatabase database)
+    [TestCase(SupportedDatabase.OpenSearch)]
+    public async Task BatchUpsertAndGet_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
-        var vectorDatabase = environment.VectorDatabase;
-        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
+        var collection = environment.VectorStore.GetCollection<string, TestVectorRecord>(environment.CollectionName);
+        await collection.EnsureCollectionExistsAsync();
 
-        var texts = new[] { "apple", "orange" };
-        var metadatas = new Dictionary<string, object>[2];
-        metadatas[0] = new Dictionary<string, object>
+        var records = new[]
         {
-            ["string"] = "red",
-            //["double"] = 1.01d,
-            //["guid"] = 1.01d,
+            new TestVectorRecord { Text = "apple", Color = "red", Embedding = Embeddings["apple"] },
+            new TestVectorRecord { Text = "orange", Color = "orange", Embedding = Embeddings["orange"] },
+            new TestVectorRecord { Text = "banana", Color = "yellow", Embedding = Embeddings["banana"] },
         };
 
-        metadatas[1] = new Dictionary<string, object>
+        await collection.UpsertAsync(records);
+
+        foreach (var record in records)
         {
-            ["color"] = "orange"
-        };
-
-        var ids = await vectorCollection.AddTextsAsync(environment.EmbeddingModel, texts, metadatas);
-
-        ids.Should().HaveCount(2);
-
-        var firstId = ids.First();
-        var secondId = ids.Skip(1).First();
-
-        firstId.Should().NotBeEmpty();
-        secondId.Should().NotBeEmpty();
-
-        var actualFirstDocument = await vectorCollection.GetDocumentByIdAsync(firstId);
-        actualFirstDocument.Should().NotBeNull();
-        actualFirstDocument!.PageContent.Should().BeEquivalentTo(texts[0]);
-        actualFirstDocument.Metadata["string"].Should().BeEquivalentTo(metadatas[0]["string"]);
-        //actualFirstDocument.Metadata["double"].Should().BeEquivalentTo(metadatas[0]["double"]);
-        //actualFirstDocument.Metadata["guid"].Should().BeEquivalentTo(metadatas[0]["guid"]);
-
-        var actualSecondDocument = await vectorCollection.GetDocumentByIdAsync(secondId);
-        actualSecondDocument.Should().NotBeNull();
-        actualSecondDocument!.PageContent.Should().BeEquivalentTo(texts[1]);
-        actualSecondDocument.Metadata["color"].Should().BeEquivalentTo(metadatas[1]["color"]);
-    }
-
-    [TestCase(SupportedDatabase.InMemory)]
-    //[TestCase(SupportedDatabase.Chroma)]
-    //[TestCase(SupportedDatabase.OpenSearch)]
-    [TestCase(SupportedDatabase.Postgres)]
-    [TestCase(SupportedDatabase.SqLite)]
-    [TestCase(SupportedDatabase.Mongo)]
-    [TestCase(SupportedDatabase.DuckDb)]
-    [TestCase(SupportedDatabase.Weaviate)]
-    //[TestCase(SupportedDatabase.Elasticsearch)]
-    //[TestCase(SupportedDatabase.Milvus)]
-    public async Task DeleteDocuments_Ok(SupportedDatabase database)
-    {
-        await using var environment = await StartEnvironmentForAsync(database);
-        var vectorDatabase = environment.VectorDatabase;
-        var vectorCollection = await vectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
-
-        var documents = new[]
-        {
-            new Document("apple", new Dictionary<string, object>
-            {
-                ["color"] = "red"
-            }),
-            new Document("orange", new Dictionary<string, object>
-            {
-                ["color"] = "orange"
-            })
-        };
-
-        var ids = await vectorCollection.AddDocumentsAsync(environment.EmbeddingModel, documents);
-
-        await vectorCollection.DeleteAsync(ids);
-
-        var firstId = ids.First();
-        var secondId = ids.Skip(1).First();
-
-        var actualFist = await vectorCollection.GetDocumentByIdAsync(firstId);
-        var actualSecond = await vectorCollection.GetDocumentByIdAsync(secondId);
-
-        actualFist.Should().BeNull();
-        actualSecond.Should().BeNull();
-    }
-
-    [TestCase(SupportedDatabase.InMemory)]
-    //[TestCase(SupportedDatabase.Chroma)]
-    //[TestCase(SupportedDatabase.OpenSearch)]
-    [TestCase(SupportedDatabase.Postgres)]
-    [TestCase(SupportedDatabase.SqLite)]
-    [TestCase(SupportedDatabase.DuckDb)]
-    //[TestCase(SupportedDatabase.Weaviate)]
-    //[TestCase(SupportedDatabase.Elasticsearch)]
-    //[TestCase(SupportedDatabase.Milvus)]
-    public async Task SimilaritySearch_Ok(SupportedDatabase database)
-    {
-        await using var environment = await StartEnvironmentForAsync(database);
-        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
-
-        await vectorCollection.AddTextsAsync(environment.EmbeddingModel, Embeddings.Keys);
-
-        var similar = await vectorCollection.SearchAsync(
-            environment.EmbeddingModel,
-            embeddingRequest: "lemon",
-            searchSettings: new VectorSearchSettings
-            {
-                Type = VectorSearchType.Similarity,
-                NumberOfResults = 5,
-            });
-        similar.Items.Should().HaveCount(5);
-
-        var similarTexts = similar.Items.Select(s => s.Text).ToArray();
-
-        similarTexts[0].Should().BeEquivalentTo("lemon");
-        similarTexts.Should().Contain("orange");
-        similarTexts.Should().Contain("peach");
-        similarTexts.Should().Contain("banana");
-        similarTexts.Should().Contain("apple");
-    }
-
-    [TestCase(SupportedDatabase.InMemory)]
-    //[TestCase(SupportedDatabase.Chroma)]
-    //[TestCase(SupportedDatabase.OpenSearch)]
-    [TestCase(SupportedDatabase.Postgres)]
-    [TestCase(SupportedDatabase.SqLite)]
-    [TestCase(SupportedDatabase.DuckDb)]
-    //[TestCase(SupportedDatabase.Weaviate)]
-    //[TestCase(SupportedDatabase.Elasticsearch)]
-    //[TestCase(SupportedDatabase.Milvus)]
-    public async Task SimilaritySearchByVector_Ok(SupportedDatabase database)
-    {
-        await using var environment = await StartEnvironmentForAsync(database);
-        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
-
-        await vectorCollection.AddTextsAsync(environment.EmbeddingModel, Embeddings.Keys);
-
-        var similar = await vectorCollection.SearchAsync(Embeddings["lemon"], new VectorSearchSettings
-        {
-            NumberOfResults = 5,
-        });
-        similar.Items.Should().HaveCount(5);
-
-        var similarTexts = similar.Items.Select(s => s.Text).ToArray();
-
-        similarTexts[0].Should().BeEquivalentTo("lemon");
-        similarTexts.Should().Contain("orange");
-        similarTexts.Should().Contain("peach");
-        similarTexts.Should().Contain("banana");
-        similarTexts.Should().Contain("apple");
-    }
-
-    [TestCase(SupportedDatabase.InMemory)]
-    //[TestCase(SupportedDatabase.Chroma)]
-    //[TestCase(SupportedDatabase.OpenSearch)]
-    [TestCase(SupportedDatabase.Postgres)]
-    [TestCase(SupportedDatabase.SqLite)]
-    [TestCase(SupportedDatabase.DuckDb)]
-    //[TestCase(SupportedDatabase.Weaviate)]
-    //[TestCase(SupportedDatabase.Elasticsearch)]
-    //[TestCase(SupportedDatabase.Milvus)]
-    public async Task SimilaritySearchWithScores_Ok(SupportedDatabase database)
-    {
-        await using var environment = await StartEnvironmentForAsync(database);
-        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
-
-        await vectorCollection.AddTextsAsync(environment.EmbeddingModel, Embeddings.Keys);
-
-        var similar = await vectorCollection.SearchAsync(environment.EmbeddingModel, "lemon", searchSettings: new VectorSearchSettings
-        {
-            NumberOfResults = 5,
-        });
-        similar.Items.Should().HaveCount(5);
-
-        var first = similar.Items.First();
-
-        first.Text.Should().BeEquivalentTo("lemon");
-        if (database is SupportedDatabase.Chroma or SupportedDatabase.Postgres)
-        {
-            first.Distance.Should().BeGreaterThanOrEqualTo(1f);
+            var retrieved = await collection.GetAsync(record.Id);
+            retrieved.Should().NotBeNull();
+            retrieved!.Text.Should().Be(record.Text);
         }
     }
 
     [TestCase(SupportedDatabase.InMemory)]
-    //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
-    [TestCase(SupportedDatabase.SqLite)]
-    [TestCase(SupportedDatabase.Mongo)]
-    //[TestCase(SupportedDatabase.DuckDb)]
-    //[TestCase(SupportedDatabase.Weaviate)]
-    //[TestCase(SupportedDatabase.Elasticsearch)]
-    //[TestCase(SupportedDatabase.Milvus)]
-    public async Task MetadataSearch_Ok(SupportedDatabase database)
+    [TestCase(SupportedDatabase.OpenSearch)]
+    public async Task DeleteRecord_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
-        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
+        var collection = environment.VectorStore.GetCollection<string, TestVectorRecord>(environment.CollectionName);
+        await collection.EnsureCollectionExistsAsync();
 
-        var texts = new[] { "apple", "orange" };
-
-        var metadatas = new Dictionary<string, object>[2];
-        metadatas[0] = new Dictionary<string, object>
+        var record = new TestVectorRecord
         {
-            ["color"] = "red"
+            Text = "apple",
+            Color = "red",
+            Embedding = Embeddings["apple"],
         };
 
-        metadatas[1] = new Dictionary<string, object>
-        {
-            ["color"] = "orange"
-        };
+        await collection.UpsertAsync(record);
 
-        var totalItems = await vectorCollection.AddTextsAsync(environment.EmbeddingModel, texts, metadatas);
+        var retrieved = await collection.GetAsync(record.Id);
+        retrieved.Should().NotBeNull();
 
-        // Define the filters to get the orange entry
-        var filters = new Dictionary<string, object>
-        {
-            { "color", "orange" }
-        };
+        await collection.DeleteAsync(record.Id);
 
-
-        var items = await vectorCollection.SearchByMetadata(filters);
-
-        totalItems.Should().HaveCount(2);
-
-        items.Should().HaveCount(1);
-        var result = items.Single();
-        result.Text.Should().Be("orange");
-        result.Metadata.Should().ContainKey("color");
-        result.Metadata?["color"].Should().Be("orange");
+        var deleted = await collection.GetAsync(record.Id);
+        deleted.Should().BeNull();
     }
 
     [TestCase(SupportedDatabase.InMemory)]
-    //[TestCase(SupportedDatabase.OpenSearch)]
     [TestCase(SupportedDatabase.Postgres)]
-    [TestCase(SupportedDatabase.SqLite)]
-    [TestCase(SupportedDatabase.Mongo)]
-    //[TestCase(SupportedDatabase.DuckDb)]
-    //[TestCase(SupportedDatabase.Weaviate)]
-    //[TestCase(SupportedDatabase.Elasticsearch)]
-    //[TestCase(SupportedDatabase.Milvus)]
-    public async Task SearchByMetadata_WithNullFilters_ThrowsArgumentException(SupportedDatabase database)
+    [TestCase(SupportedDatabase.OpenSearch)]
+    public async Task BatchDelete_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
-        var vectorCollection = await environment.VectorDatabase.GetOrCreateCollectionAsync(environment.CollectionName, dimensions: environment.Dimensions);
+        var collection = environment.VectorStore.GetCollection<string, TestVectorRecord>(environment.CollectionName);
+        await collection.EnsureCollectionExistsAsync();
 
-        // Act & Assert
-        await vectorCollection.Invoking(v => v.SearchByMetadata(null!))
-            .Should().ThrowAsync<ArgumentNullException>();
+        var record1 = new TestVectorRecord
+        {
+            Text = "apple",
+            Embedding = Embeddings["apple"],
+        };
+        var record2 = new TestVectorRecord
+        {
+            Text = "orange",
+            Embedding = Embeddings["orange"],
+        };
+        var record3 = new TestVectorRecord
+        {
+            Text = "banana",
+            Embedding = Embeddings["banana"],
+        };
+
+        await collection.UpsertAsync(record1);
+        await collection.UpsertAsync(record2);
+        await collection.UpsertAsync(record3);
+
+        // Batch delete two of the three records
+        await collection.DeleteAsync([record1.Id, record2.Id]);
+
+        var deleted1 = await collection.GetAsync(record1.Id);
+        deleted1.Should().BeNull();
+
+        var deleted2 = await collection.GetAsync(record2.Id);
+        deleted2.Should().BeNull();
+
+        // Third record should still exist
+        var remaining = await collection.GetAsync(record3.Id);
+        remaining.Should().NotBeNull();
+        remaining!.Text.Should().Be("banana");
+    }
+
+    [TestCase(SupportedDatabase.InMemory)]
+    [TestCase(SupportedDatabase.Postgres)]
+    [TestCase(SupportedDatabase.OpenSearch)]
+    public async Task GetServiceMetadata_Ok(SupportedDatabase database)
+    {
+        await using var environment = await StartEnvironmentForAsync(database);
+        var store = environment.VectorStore;
+        var collection = store.GetCollection<string, TestVectorRecord>(environment.CollectionName);
+
+        // VectorStore should return VectorStoreMetadata
+        var storeMetadata = store.GetService(typeof(VectorStoreMetadata)) as VectorStoreMetadata;
+        storeMetadata.Should().NotBeNull();
+        storeMetadata!.VectorStoreSystemName.Should().NotBeNullOrEmpty();
+
+        // VectorStoreCollection should return VectorStoreCollectionMetadata
+        var collectionMetadata = collection.GetService(typeof(VectorStoreCollectionMetadata)) as VectorStoreCollectionMetadata;
+        collectionMetadata.Should().NotBeNull();
+        collectionMetadata!.VectorStoreSystemName.Should().Be(storeMetadata.VectorStoreSystemName);
+        collectionMetadata.CollectionName.Should().Be(environment.CollectionName);
+    }
+
+    [TestCase(SupportedDatabase.InMemory)]
+    [TestCase(SupportedDatabase.Postgres)]
+    [TestCase(SupportedDatabase.OpenSearch)]
+    public async Task SimilaritySearch_Ok(SupportedDatabase database)
+    {
+        await using var environment = await StartEnvironmentForAsync(database);
+        var collection = environment.VectorStore.GetCollection<string, TestVectorRecord>(environment.CollectionName);
+        await collection.EnsureCollectionExistsAsync();
+
+        // Add all embeddings
+        foreach (var kvp in Embeddings)
+        {
+            await collection.UpsertAsync(new TestVectorRecord
+            {
+                Text = kvp.Key,
+                Embedding = kvp.Value,
+            });
+        }
+
+        // Search for items similar to "lemon"
+        var results = new List<VectorSearchResult<TestVectorRecord>>();
+        await foreach (var result in collection.SearchAsync(
+            new ReadOnlyMemory<float>(Embeddings["lemon"]),
+            top: 5))
+        {
+            results.Add(result);
+        }
+
+        results.Should().HaveCount(5);
+
+        var similarTexts = results.Select(r => r.Record.Text).ToArray();
+        similarTexts[0].Should().Be("lemon");
+        similarTexts.Should().Contain("orange");
+        similarTexts.Should().Contain("peach");
+        similarTexts.Should().Contain("banana");
+        similarTexts.Should().Contain("apple");
     }
 }
