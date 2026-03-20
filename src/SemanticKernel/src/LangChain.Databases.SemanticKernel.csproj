@@ -7,7 +7,6 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.SemanticKernel.Core"/>
-        <PackageReference Include="System.Linq.Async"/>
         <ProjectReference Include="..\..\Abstractions\src\LangChain.Databases.Abstractions.csproj"/>
     </ItemGroup>
 

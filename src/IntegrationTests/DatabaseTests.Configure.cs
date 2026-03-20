@@ -39,7 +39,6 @@ public partial class DatabaseTests
                     var container = new ContainerBuilder()
                         .WithImage("chromadb/chroma")
                         .WithPortBinding(hostPort: port, containerPort: 8000)
-                        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8000))
                         .Build();
 
                     await container.StartAsync(cancellationToken);
@@ -72,7 +71,6 @@ public partial class DatabaseTests
                         .WithDatabase("test")
                         .WithUsername("postgres")
                         .WithPortBinding(hostPort: port, containerPort: 5432)
-                        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5432))
                         .Build();
 
                     await container.StartAsync(cancellationToken);
@@ -96,7 +94,6 @@ public partial class DatabaseTests
                         .WithEnvironment("discovery.type", "single-node")
                         .WithEnvironment("plugins.security.disabled", "true")
                         .WithEnvironment("OPENSEARCH_INITIAL_ADMIN_PASSWORD", password)
-                        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(9200))
                         .Build();
 
                     await container.StartAsync(cancellationToken);
@@ -120,7 +117,6 @@ public partial class DatabaseTests
                     var container = new MongoDbBuilder()
                         .WithImage("mongo")
                         .WithPortBinding(hostPort: port, containerPort: 27017)
-                        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(27017))
                         .Build();
 
                     await container.StartAsync(cancellationToken);
@@ -155,52 +151,6 @@ public partial class DatabaseTests
                     var container = new MilvusBuilder().Build();
 
                     await container.StartAsync(cancellationToken);
-                    // var network = new NetworkBuilder()
-                    //     .WithName("milvus-network")
-                    //     .Build();
-                    //
-                    // var etcdContainer = new ContainerBuilder()
-                    //     .WithImage("quay.io/coreos/etcd:v3.5.5")
-                    //     .WithName("milvus-etcd")
-                    //     .WithEnvironment("ETCD_AUTO_COMPACTION_MODE", "revision")
-                    //     .WithEnvironment("ETCD_AUTO_COMPACTION_RETENTION", "1000")
-                    //     .WithEnvironment("ETCD_QUOTA_BACKEND_BYTES", "4294967296")
-                    //     .WithEnvironment("ETCD_SNAPSHOT_COUNT", "50000")
-                    //     .WithPortBinding(2379, 2379)
-                    //     .WithCommand("etcd",
-                    //                  "-advertise-client-urls=http://0.0.0.0:2379",
-                    //                  "-listen-client-urls=http://0.0.0.0:2379",
-                    //                  "--data-dir", "/etcd")
-                    //     .Build();
-                    //
-                    // var minioContainer = new ContainerBuilder()
-                    //     .WithImage("minio/minio:RELEASE.2023-03-20T20-16-18Z")
-                    //     .WithName("milvus-minio")
-                    //     .WithPortBinding(9000, 9000)
-                    //     .WithPortBinding(9001, 9001)
-                    //     .WithEnvironment("MINIO_ACCESS_KEY", "minioadmin")
-                    //     .WithEnvironment("MINIO_SECRET_KEY", "minioadmin")
-                    //     .WithCommand("minio", "server", "/minio_data", "--console-address", ":9001")
-                    //     .Build();
-                    //
-                    // var milvusContainer = new ContainerBuilder()
-                    //     .WithImage("milvusdb/milvus:v2.3.0")
-                    //     .WithName("milvus-standalone")
-                    //     .WithPortBinding(19530, 19530)
-                    //     .WithPortBinding(9091, 9091)
-                    //     .WithEnvironment("ETCD_ENDPOINTS", "milvus-etcd:2379")
-                    //     .WithEnvironment("MINIO_ADDRESS", "milvus-minio:9000")
-                    //     .WithCommand("milvus", "run", "standalone")
-                    //     .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(2379))
-                    //     .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(9000))
-                    //     .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(9001))
-                    //     .DependsOn(etcdContainer)
-                    //     .DependsOn(minioContainer)
-                    //     .Build();
-                    //
-                    // await etcdContainer.StartAsync(cancellationToken);
-                    // await minioContainer.StartAsync(cancellationToken);
-                    // await milvusContainer.StartAsync(cancellationToken);
 
                     return new DatabaseTestEnvironment
                     {
@@ -217,7 +167,6 @@ public partial class DatabaseTests
                         .WithPortBinding(hostPort: port1, containerPort: 8080)
                         .WithPortBinding(hostPort: port2, containerPort: 50051)
                         .WithEnvironment("AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED", "true")
-                        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
                         .Build();
 
                     await container.StartAsync(cancellationToken);

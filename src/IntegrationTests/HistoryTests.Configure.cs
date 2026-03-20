@@ -46,7 +46,6 @@ public partial class HistoryTests
             case SupportedDatabase.Mongo:
                 {
                     var container = new MongoDbBuilder()
-                        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MongoDbBuilder.MongoDbPort))
                         .Build();
 
                     await container.StartAsync(cancellationToken);
@@ -67,7 +66,6 @@ public partial class HistoryTests
             case SupportedDatabase.Redis:
                 {
                     var container = new RedisBuilder()
-                        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(RedisBuilder.RedisPort))
                         .Build();
 
                     await container.StartAsync(cancellationToken);
