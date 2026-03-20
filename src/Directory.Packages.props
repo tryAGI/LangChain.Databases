@@ -60,7 +60,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
-    <PackageVersion Include="MongoDB.Bson" Version="2.29.0" />
-    <PackageVersion Include="MongoDB.Driver" Version="2.29.0" />
+    <PackageVersion Include="MongoDB.Bson" Version="2.30.0" />
+    <PackageVersion Include="MongoDB.Driver" Version="2.30.0" />
   </ItemGroup>
 </Project>
