@@ -80,10 +80,7 @@ public class MongoDbClient(IMongoContext mongoContext) : IMongoDbClient
 
     public async Task<IMongoCollection<T>> CreateCollection<T>(string collectionName)
     {
-        await mongoContext.GetDatabase().CreateCollectionAsync(collectionName, new CreateCollectionOptions
-        {
-            AutoIndexId = true,
-        }).ConfigureAwait(false);
+        await mongoContext.GetDatabase().CreateCollectionAsync(collectionName).ConfigureAwait(false);
 
         var collection = mongoContext.GetCollection<T>(collectionName);
         return collection;
