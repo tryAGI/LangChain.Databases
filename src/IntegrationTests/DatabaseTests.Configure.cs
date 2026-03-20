@@ -51,6 +51,12 @@ public partial class DatabaseTests
                         .WithEnvironment("discovery.type", "single-node")
                         .WithEnvironment("plugins.security.disabled", "true")
                         .WithEnvironment("OPENSEARCH_INITIAL_ADMIN_PASSWORD", password)
+                        .WithWaitStrategy(Wait.ForUnixContainer()
+                            .UntilHttpRequestIsSucceeded(r => r
+                                .ForPort(9200)
+                                .ForPath("/")
+                                .ForResponseMessageMatching(response =>
+                                    Task.FromResult(response.IsSuccessStatusCode))))
                         .Build();
 
                     await container.StartAsync(cancellationToken);
