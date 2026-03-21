@@ -1,21 +1,21 @@
-abstract LangChain.Memory.BaseChatMessageHistory.AddMessage(LangChain.Providers.Message message) -> System.Threading.Tasks.Task!
+abstract LangChain.Memory.BaseChatMessageHistory.AddMessage(Microsoft.Extensions.AI.ChatMessage! message) -> System.Threading.Tasks.Task!
 abstract LangChain.Memory.BaseChatMessageHistory.Clear() -> System.Threading.Tasks.Task!
-abstract LangChain.Memory.BaseChatMessageHistory.Messages.get -> System.Collections.Generic.IReadOnlyList<LangChain.Providers.Message>!
+abstract LangChain.Memory.BaseChatMessageHistory.Messages.get -> System.Collections.Generic.IReadOnlyList<Microsoft.Extensions.AI.ChatMessage!>!
 LangChain.Memory.BaseChatMessageHistory
 LangChain.Memory.BaseChatMessageHistory.AddAiMessage(string! message) -> System.Threading.Tasks.Task!
 LangChain.Memory.BaseChatMessageHistory.AddUserMessage(string! message) -> System.Threading.Tasks.Task!
 LangChain.Memory.BaseChatMessageHistory.BaseChatMessageHistory() -> void
 LangChain.Memory.ChatMessageHistory
 LangChain.Memory.ChatMessageHistory.ChatMessageHistory() -> void
-LangChain.Memory.ChatMessageHistory.IsMessageAccepted.get -> System.Predicate<LangChain.Providers.Message>!
+LangChain.Memory.ChatMessageHistory.IsMessageAccepted.get -> System.Predicate<Microsoft.Extensions.AI.ChatMessage!>!
 LangChain.Memory.ChatMessageHistory.IsMessageAccepted.set -> void
 LangChain.Memory.FileChatMessageHistory
-override LangChain.Memory.ChatMessageHistory.AddMessage(LangChain.Providers.Message message) -> System.Threading.Tasks.Task!
+override LangChain.Memory.ChatMessageHistory.AddMessage(Microsoft.Extensions.AI.ChatMessage! message) -> System.Threading.Tasks.Task!
 override LangChain.Memory.ChatMessageHistory.Clear() -> System.Threading.Tasks.Task!
-override LangChain.Memory.ChatMessageHistory.Messages.get -> System.Collections.Generic.IReadOnlyList<LangChain.Providers.Message>!
-override LangChain.Memory.FileChatMessageHistory.AddMessage(LangChain.Providers.Message message) -> System.Threading.Tasks.Task!
+override LangChain.Memory.ChatMessageHistory.Messages.get -> System.Collections.Generic.IReadOnlyList<Microsoft.Extensions.AI.ChatMessage!>!
+override LangChain.Memory.FileChatMessageHistory.AddMessage(Microsoft.Extensions.AI.ChatMessage! message) -> System.Threading.Tasks.Task!
 override LangChain.Memory.FileChatMessageHistory.Clear() -> System.Threading.Tasks.Task!
-override LangChain.Memory.FileChatMessageHistory.Messages.get -> System.Collections.Generic.IReadOnlyList<LangChain.Providers.Message>!
+override LangChain.Memory.FileChatMessageHistory.Messages.get -> System.Collections.Generic.IReadOnlyList<Microsoft.Extensions.AI.ChatMessage!>!
 static LangChain.Memory.FileChatMessageHistory.CreateAsync(string! path, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<LangChain.Memory.FileChatMessageHistory!>!
-virtual LangChain.Memory.BaseChatMessageHistory.AddMessages(System.Collections.Generic.IEnumerable<LangChain.Providers.Message>! messages) -> System.Threading.Tasks.Task!
-virtual LangChain.Memory.BaseChatMessageHistory.SetMessages(System.Collections.Generic.IEnumerable<LangChain.Providers.Message>! messages) -> System.Threading.Tasks.Task!
+virtual LangChain.Memory.BaseChatMessageHistory.AddMessages(System.Collections.Generic.IEnumerable<Microsoft.Extensions.AI.ChatMessage!>! messages) -> System.Threading.Tasks.Task!
+virtual LangChain.Memory.BaseChatMessageHistory.SetMessages(System.Collections.Generic.IEnumerable<Microsoft.Extensions.AI.ChatMessage!>! messages) -> System.Threading.Tasks.Task!

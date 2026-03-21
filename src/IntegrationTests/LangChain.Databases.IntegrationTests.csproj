@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <NoWarn>$(NoWarn);NETSDK1206;SKEXP0020;MEVD9000</NoWarn>
     </PropertyGroup>
 
@@ -14,7 +14,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="LangChain.Providers.Abstractions" />
       <PackageReference Include="Microsoft.Extensions.VectorData.Abstractions" />
       <PackageReference Include="Microsoft.SemanticKernel.Connectors.InMemory" />
       <PackageReference Include="Testcontainers" />

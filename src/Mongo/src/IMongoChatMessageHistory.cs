@@ -1,11 +1,11 @@
-﻿using LangChain.Providers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Databases.Mongo;
 
 public interface IMongoChatMessageHistory
 {
-    IReadOnlyList<Message> Messages { get; }
+    IReadOnlyList<ChatMessage> Messages { get; }
 
-    Task AddMessage(Message message);
+    Task AddMessage(ChatMessage message);
     Task Clear();
 }

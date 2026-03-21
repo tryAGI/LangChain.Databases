@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using LangChain.Memory;
-using LangChain.Providers;
+using Microsoft.Extensions.AI;
 using StackExchange.Redis;
 
 namespace LangChain.Databases;
@@ -49,13 +49,13 @@ public class RedisChatMessageHistory : BaseChatMessageHistory
     /// Retrieve the messages from Redis
     /// TODO: use async methods
     /// </summary>
-    public override IReadOnlyList<Message> Messages
+    public override IReadOnlyList<ChatMessage> Messages
     {
         get
         {
             var database = _multiplexer.Value.GetDatabase();
             var values = database.ListRange(Key, start: 0, stop: -1);
-            var messages = values.Select(v => JsonSerializer.Deserialize<Message>(v.ToString())).Reverse();
+            var messages = values.Select(v => JsonSerializer.Deserialize<ChatMessage>(v.ToString())!).Reverse();
 
             return messages.ToList();
         }
@@ -64,7 +64,7 @@ public class RedisChatMessageHistory : BaseChatMessageHistory
     /// <summary>
     /// Append the message to the record in Redis
     /// </summary>
-    public override async Task AddMessage(Message message)
+    public override async Task AddMessage(ChatMessage message)
     {
         var database = _multiplexer.Value.GetDatabase();
         await database.ListLeftPushAsync(Key, JsonSerializer.Serialize(message)).ConfigureAwait(false);

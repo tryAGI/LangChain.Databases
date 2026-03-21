@@ -1,4 +1,4 @@
-﻿using LangChain.Providers;
+using Microsoft.Extensions.AI;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -11,10 +11,10 @@ public class FileChatMessageHistory : BaseChatMessageHistory
 {
     private string MessagesFilePath { get; }
 
-    private List<Message> _messages = new List<Message>();
+    private List<ChatMessage> _messages = new List<ChatMessage>();
 
     /// <inheritdoc/>
-    public override IReadOnlyList<Message> Messages => _messages;
+    public override IReadOnlyList<ChatMessage> Messages => _messages;
 
     /// <summary>
     /// Initializes new history instance with provided file path
@@ -40,7 +40,7 @@ public class FileChatMessageHistory : BaseChatMessageHistory
     }
 
     /// <inheritdoc/>
-    public override Task AddMessage(Message message)
+    public override Task AddMessage(ChatMessage message)
     {
         _messages.Add(message);
         SaveMessages();
@@ -59,7 +59,7 @@ public class FileChatMessageHistory : BaseChatMessageHistory
 
     private void SaveMessages()
     {
-        var json = JsonSerializer.Serialize(_messages, SourceGenerationContext.Default.ListMessage);
+        var json = JsonSerializer.Serialize(_messages, SourceGenerationContext.Default.ListChatMessage);
 
         File.WriteAllText(MessagesFilePath, json);
     }
@@ -71,11 +71,11 @@ public class FileChatMessageHistory : BaseChatMessageHistory
             var json = await File2.ReadAllTextAsync(MessagesFilePath).ConfigureAwait(false);
             if (!string.IsNullOrWhiteSpace(json))
             {
-                _messages = JsonSerializer.Deserialize(json, SourceGenerationContext.Default.ListMessage) ?? new List<Message>();
+                _messages = JsonSerializer.Deserialize(json, SourceGenerationContext.Default.ListChatMessage) ?? new List<ChatMessage>();
             }
         }
     }
 }
 
-[JsonSerializable(typeof(List<Message>))]
+[JsonSerializable(typeof(List<ChatMessage>))]
 internal sealed partial class SourceGenerationContext : JsonSerializerContext;

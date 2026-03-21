@@ -11,7 +11,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
     <PackageVersion Include="LangChain.Polyfills" Version="0.17.0" />
-    <PackageVersion Include="LangChain.Providers.Abstractions" Version="0.17.0" />
+    <PackageVersion Include="Microsoft.Extensions.AI.Abstractions" Version="9.6.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.Extensions.VectorData.Abstractions" Version="10.1.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />

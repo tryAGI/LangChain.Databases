@@ -1,27 +1,27 @@
-﻿using LangChain.Providers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Memory;
 
 /// <summary>
 /// In memory implementation of chat message history.
-/// 
+///
 /// Stores messages in an in memory list.
 /// </summary>
 public class ChatMessageHistory : BaseChatMessageHistory
 {
-    private readonly List<Message> _messages = new List<Message>();
+    private readonly List<ChatMessage> _messages = new List<ChatMessage>();
 
     /// <summary>
     /// Used to inspect and filter messages on their way to the history store
     /// NOTE: This is not a feature of python langchain
     /// </summary>
-    public Predicate<Message> IsMessageAccepted { get; set; } = (x => true);
+    public Predicate<ChatMessage> IsMessageAccepted { get; set; } = (x => true);
 
     /// <inheritdoc/>
-    public override IReadOnlyList<Message> Messages => _messages;
+    public override IReadOnlyList<ChatMessage> Messages => _messages;
 
     /// <inheritdoc/>
-    public override Task AddMessage(Message message)
+    public override Task AddMessage(ChatMessage message)
     {
         if (IsMessageAccepted(message))
         {

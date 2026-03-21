@@ -1,4 +1,4 @@
-﻿using LangChain.Providers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Databases.IntegrationTests;
 
@@ -15,9 +15,9 @@ public partial class HistoryTests
 
         history.Messages.Should().BeEmpty();
 
-        var humanMessage = Message.Human("Hi, AI");
+        var humanMessage = new ChatMessage(ChatRole.User, "Hi, AI");
         await history.AddMessage(humanMessage);
-        var aiMessage = Message.Ai("Hi, human");
+        var aiMessage = new ChatMessage(ChatRole.Assistant, "Hi, human");
         await history.AddMessage(aiMessage);
 
         var actual = history.Messages;
@@ -25,9 +25,9 @@ public partial class HistoryTests
         actual.Should().NotBeEmpty();
         actual.Should().HaveCount(2);
         actual[0].Role.Should().Be(humanMessage.Role);
-        actual[0].Content.Should().Be(humanMessage.Content);
+        actual[0].Text.Should().Be(humanMessage.Text);
         actual[1].Role.Should().Be(aiMessage.Role);
-        actual[1].Content.Should().Be(aiMessage.Content);
+        actual[1].Text.Should().Be(aiMessage.Text);
 
         await history.Clear();
 

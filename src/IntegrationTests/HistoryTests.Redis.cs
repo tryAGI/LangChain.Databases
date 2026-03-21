@@ -1,4 +1,4 @@
-﻿using LangChain.Providers;
+using Microsoft.Extensions.AI;
 
 namespace LangChain.Databases.IntegrationTests;
 
@@ -12,7 +12,7 @@ public partial class HistoryTests
         var history = (RedisChatMessageHistory)environment.History;
         history.Ttl = TimeSpan.FromSeconds(2);
 
-        var humanMessage = Message.Human("Hi, AI");
+        var humanMessage = new ChatMessage(ChatRole.User, "Hi, AI");
         await history.AddMessage(humanMessage);
 
         await Task.Delay(2_500);
