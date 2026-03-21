@@ -1,6 +1,5 @@
 using Microsoft.Extensions.AI;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace LangChain.Memory;
 
@@ -9,6 +8,11 @@ namespace LangChain.Memory;
 /// </summary>
 public class FileChatMessageHistory : BaseChatMessageHistory
 {
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        WriteIndented = true,
+    };
+
     private string MessagesFilePath { get; }
 
     private List<ChatMessage> _messages = new List<ChatMessage>();
@@ -59,7 +63,7 @@ public class FileChatMessageHistory : BaseChatMessageHistory
 
     private void SaveMessages()
     {
-        var json = JsonSerializer.Serialize(_messages, SourceGenerationContext.Default.ListChatMessage);
+        var json = JsonSerializer.Serialize(_messages, JsonOptions);
 
         File.WriteAllText(MessagesFilePath, json);
     }
@@ -71,11 +75,8 @@ public class FileChatMessageHistory : BaseChatMessageHistory
             var json = await File2.ReadAllTextAsync(MessagesFilePath).ConfigureAwait(false);
             if (!string.IsNullOrWhiteSpace(json))
             {
-                _messages = JsonSerializer.Deserialize(json, SourceGenerationContext.Default.ListChatMessage) ?? new List<ChatMessage>();
+                _messages = JsonSerializer.Deserialize<List<ChatMessage>>(json, JsonOptions) ?? new List<ChatMessage>();
             }
         }
     }
 }
-
-[JsonSerializable(typeof(List<ChatMessage>))]
-internal sealed partial class SourceGenerationContext : JsonSerializerContext;
