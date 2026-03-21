@@ -116,7 +116,7 @@ The following wrapper projects have been removed — use the corresponding SK co
 
 ## Key Conventions
 
-- **Target frameworks:** `net4.6.2`, `netstandard2.0`, `net8.0`, `net9.0` (abstractions); `net8.0`, `net9.0` (Postgres, Redis); `net4.6.2`, `netstandard2.0`, `net8.0`, `net9.0` (OpenSearch, Mongo)
+- **Target frameworks:** `net4.6.2`, `netstandard2.0`, `net8.0`, `net9.0`, `net10.0` (abstractions); `net8.0`, `net9.0`, `net10.0` (Postgres, Redis); `net4.6.2`, `netstandard2.0`, `net8.0`, `net9.0`, `net10.0` (OpenSearch); `net4.7.2`, `netstandard2.1`, `net8.0`, `net9.0`, `net10.0` (Mongo)
 - **Language:** C# preview, nullable reference types enabled, implicit usings
 - **Strong naming:** All assemblies signed with `src/key.snk`
 - **Versioning:** MinVer with `v` tag prefix
