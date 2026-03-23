@@ -208,7 +208,7 @@ DO UPDATE SET content=@content, metadata=@metadata, embedding=@embedding, timest
 
         await using (connection)
         {
-            await using var transaction = (await connection.BeginTransactionAsync(cancellationToken).ConfigureAwait(false)).ConfigureAwait(false);
+            await using var transaction = await connection.BeginTransactionAsync(cancellationToken).ConfigureAwait(false);
 
             try
             {

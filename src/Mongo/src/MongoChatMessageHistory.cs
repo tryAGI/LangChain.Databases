@@ -20,8 +20,8 @@ public class MongoChatMessageHistory(
             .BatchDeactivate<LangChainAiSessionHistory>(i => i.SessionId == sessionId).ConfigureAwait(false);
     }
 
-    [RequiresUnreferencedCode()]
-    [RequiresDynamicCode()]
+    [RequiresUnreferencedCode("Uses System.Text.Json serialization.")]
+    [RequiresDynamicCode("Uses System.Text.Json serialization.")]
     public override async Task AddMessage(ChatMessage message)
     {
         await MongoRepository.InsertAsync(new LangChainAiSessionHistory
