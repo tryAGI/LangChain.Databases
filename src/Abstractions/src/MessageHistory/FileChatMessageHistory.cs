@@ -1,4 +1,5 @@
 using Microsoft.Extensions.AI;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 namespace LangChain.Memory;
@@ -61,6 +62,8 @@ public class FileChatMessageHistory : BaseChatMessageHistory
         return Task.CompletedTask;
     }
 
+    [RequiresUnreferencedCode("Calls System.Text.Json.JsonSerializer.Serialize<TValue>(TValue, JsonSerializerOptions)")]
+    [RequiresDynamicCode("Calls System.Text.Json.JsonSerializer.Serialize<TValue>(TValue, JsonSerializerOptions)")]
     private void SaveMessages()
     {
         var json = JsonSerializer.Serialize(_messages, JsonOptions);
@@ -68,6 +71,8 @@ public class FileChatMessageHistory : BaseChatMessageHistory
         File.WriteAllText(MessagesFilePath, json);
     }
 
+    [RequiresUnreferencedCode("Calls System.Text.Json.JsonSerializer.Deserialize<TValue>(String, JsonSerializerOptions)")]
+    [RequiresDynamicCode("Calls System.Text.Json.JsonSerializer.Deserialize<TValue>(String, JsonSerializerOptions)")]
     private async Task LoadMessages()
     {
         if (File.Exists(MessagesFilePath))

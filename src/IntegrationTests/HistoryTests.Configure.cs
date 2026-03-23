@@ -8,6 +8,7 @@ namespace LangChain.Databases.IntegrationTests;
 
 public partial class HistoryTests
 {
+    [Obsolete]
     private static async Task<HistoryTestEnvironment> StartEnvironmentForAsync(SupportedDatabase database, CancellationToken cancellationToken = default)
     {
         switch (database)

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.VectorData;
@@ -10,7 +11,7 @@ namespace LangChain.Databases.OpenSearch;
 /// <summary>
 /// MEVA-compatible vector store collection backed by an OpenSearch index with k-NN.
 /// </summary>
-public class OpenSearchVectorStoreCollection<TRecord> :
+public class OpenSearchVectorStoreCollection<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] TRecord> :
     VectorStoreCollection<string, TRecord>
     where TRecord : class
 {
