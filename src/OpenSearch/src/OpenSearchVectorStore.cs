@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.VectorData;
 using OpenSearch.Client;
@@ -43,7 +44,7 @@ public class OpenSearchVectorStore : VectorStore
     public IOpenSearchClient Client => _client;
 
     /// <inheritdoc />
-    public override VectorStoreCollection<TKey, TRecord> GetCollection<TKey, TRecord>(
+    public override VectorStoreCollection<TKey, TRecord> GetCollection<TKey, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] TRecord>(
         string name,
         VectorStoreCollectionDefinition? definition = null)
     {

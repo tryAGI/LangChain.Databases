@@ -3,6 +3,7 @@ using LangChain.Memory;
 using LangChain.Databases.Mongo.Model;
 using System.Text.Json;
 using Microsoft.Extensions.AI;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LangChain.Databases.Mongo;
 
@@ -19,6 +20,8 @@ public class MongoChatMessageHistory(
             .BatchDeactivate<LangChainAiSessionHistory>(i => i.SessionId == sessionId).ConfigureAwait(false);
     }
 
+    [RequiresUnreferencedCode()]
+    [RequiresDynamicCode()]
     public override async Task AddMessage(ChatMessage message)
     {
         await MongoRepository.InsertAsync(new LangChainAiSessionHistory
