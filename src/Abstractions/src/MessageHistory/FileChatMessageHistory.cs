@@ -36,6 +36,8 @@ public class FileChatMessageHistory : BaseChatMessageHistory
     /// </summary>
     /// <param name="path">path of the local file to store the messages</param>
     /// <param name="cancellationToken"></param>
+    [RequiresDynamicCode()]
+    [RequiresUnreferencedCode()]
     public static async Task<FileChatMessageHistory> CreateAsync(string path, CancellationToken cancellationToken = default)
     {
         FileChatMessageHistory chatHistory = new FileChatMessageHistory(path);
@@ -45,6 +47,8 @@ public class FileChatMessageHistory : BaseChatMessageHistory
     }
 
     /// <inheritdoc/>
+    [RequiresDynamicCode()]
+    [RequiresUnreferencedCode()]
     public override Task AddMessage(ChatMessage message)
     {
         _messages.Add(message);
@@ -54,6 +58,8 @@ public class FileChatMessageHistory : BaseChatMessageHistory
     }
 
     /// <inheritdoc/>
+    [RequiresDynamicCode()]
+    [RequiresUnreferencedCode()]
     public override Task Clear()
     {
         _messages.Clear();
