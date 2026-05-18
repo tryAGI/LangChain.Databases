@@ -8,6 +8,7 @@ public partial class HistoryTests
     [TestCase(SupportedDatabase.File)]
     [TestCase(SupportedDatabase.Mongo)]
     [TestCase(SupportedDatabase.Redis)]
+    [Obsolete]
     public async Task FillAndClear_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
