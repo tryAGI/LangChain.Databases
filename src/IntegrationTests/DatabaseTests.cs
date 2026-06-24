@@ -8,6 +8,7 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.OpenSearch)]
+    [Obsolete]
     public async Task CreateAndDeleteCollection_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
@@ -38,6 +39,7 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.OpenSearch)]
+    [Obsolete]
     public async Task UpsertAndGet_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
@@ -72,6 +74,7 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.OpenSearch)]
+    [Obsolete]
     public async Task BatchUpsertAndGet_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
@@ -98,6 +101,7 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.OpenSearch)]
+    [Obsolete]
     public async Task DeleteRecord_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
@@ -125,6 +129,7 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.OpenSearch)]
+    [Obsolete]
     public async Task BatchDelete_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
@@ -169,6 +174,7 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.OpenSearch)]
+    [Obsolete]
     public async Task GetServiceMetadata_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
@@ -190,6 +196,7 @@ public partial class DatabaseTests
     [TestCase(SupportedDatabase.InMemory)]
     [TestCase(SupportedDatabase.Postgres)]
     [TestCase(SupportedDatabase.OpenSearch)]
+    [Obsolete]
     public async Task SimilaritySearch_Ok(SupportedDatabase database)
     {
         await using var environment = await StartEnvironmentForAsync(database);
