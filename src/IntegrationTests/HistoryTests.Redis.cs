@@ -6,6 +6,7 @@ namespace LangChain.Databases.IntegrationTests;
 public partial class HistoryTests
 {
     [Test]
+    [Obsolete]
     public async Task Redis_Ttl_Ok()
     {
         await using var environment = await StartEnvironmentForAsync(SupportedDatabase.Redis);
