@@ -2,6 +2,7 @@ name: Opens a new PR if there are format updates
 on:
   schedule:
     - cron: '00 5 * * 1'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -14,20 +15,32 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.PERSONAL_TOKEN }}
 
       - name: Setup Git user
         run: |
           git config --local user.email "auto-format-bot@langchain.com"
           git config --local user.name "github-actions[bot]"
 
-      - name: Generate branch name
-        id: branch
-        run: echo "branch_name=bot/auto-format_$(date +'%Y%m%d%H%M')" >> $GITHUB_OUTPUT
+      - name: Check for existing format pull request
+        id: existing_pr
+        run: |
+          existing_pr=$(gh pr list --head bot/auto-format --state open --json number,url --jq '.[0]')
+          if [ -n "$existing_pr" ]; then
+            {
+              echo "exists=true"
+              echo "number=$(jq -r '.number' <<< "$existing_pr")"
+              echo "url=$(jq -r '.url' <<< "$existing_pr")"
+            } >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
 
       - name: Create branch
-        run: |
-          git checkout -b ${{ steps.branch.outputs.branch_name }} origin/main
-          git rebase main
+        run: git checkout -B bot/auto-format origin/main
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
@@ -35,33 +48,46 @@ jobs:
           dotnet-version: 9.0.x
 
       - name: Format code
-        run: |
-          dotnet format
-          dotnet format analyzers --diagnostics=RS0016
+        run: dotnet format whitespace
 
       - name: Check for changes
         id: changes
         run: |
           CHANGED=$(git diff --name-only)
           if [ -z "$CHANGED" ]; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
           else
-            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Verify formatted branch
+        if: steps.changes.outputs.has_changes == 'true'
+        run: dotnet build
 
       - name: Push changes
         if: steps.changes.outputs.has_changes == 'true'
         run: |
-          git add .
+          git diff --name-only -z | xargs -0 git add --
+          test -z "$(git diff --name-only)"
           git commit -m "style: Run dotnet format"
-          git push --force-with-lease -u origin ${{ steps.branch.outputs.branch_name }}
+          git push --force-with-lease -u origin bot/auto-format
+
+      - name: Close stale format pull request
+        if: steps.changes.outputs.has_changes == 'false' && steps.existing_pr.outputs.exists == 'true'
+        run: 'gh pr close "${{ steps.existing_pr.outputs.number }}" --comment "Closing: whitespace formatting now matches main."'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
 
       - name: Wait for 15 seconds
-        if: steps.changes.outputs.has_changes == 'true'
+        if: steps.changes.outputs.has_changes == 'true' && steps.existing_pr.outputs.exists == 'false'
         run: sleep 15
       
       - name: Create pull request
-        if: steps.changes.outputs.has_changes == 'true'
-        run: gh pr create -B main -H ${{ steps.branch.outputs.branch_name }} --title 'style:Run dotnet format' --body 'Created by Github Actions'
+        if: steps.changes.outputs.has_changes == 'true' && steps.existing_pr.outputs.exists == 'false'
+        run: "gh pr create -B main -H bot/auto-format --title 'style: Run dotnet format' --body 'Created by GitHub Actions'"
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+
+      - name: Summarize updated pull request
+        if: steps.changes.outputs.has_changes == 'true' && steps.existing_pr.outputs.exists == 'true'
+        run: echo "Updated ${{ steps.existing_pr.outputs.url }}"
