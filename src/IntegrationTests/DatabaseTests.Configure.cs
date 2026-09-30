@@ -43,12 +43,9 @@ public partial class DatabaseTests
                 {
                     const string password = "StronG#1235";
 
-                    var port1 = Random.Shared.Next(49152, 65535);
-                    var port2 = Random.Shared.Next(49152, 65535);
                     var container = new ContainerBuilder()
                         .WithImage("opensearchproject/opensearch:2.19.4")
-                        .WithPortBinding(hostPort: port1, containerPort: 9600)
-                        .WithPortBinding(hostPort: port2, containerPort: 9200)
+                        .WithPortBinding(9200, assignRandomHostPort: true)
                         .WithEnvironment("discovery.type", "single-node")
                         .WithEnvironment("plugins.security.disabled", "true")
                         .WithEnvironment("OPENSEARCH_INITIAL_ADMIN_PASSWORD", password)
@@ -62,16 +59,18 @@ public partial class DatabaseTests
 
                     await container.StartAsync(cancellationToken);
 
+                    var port = container.GetMappedPublicPort(9200);
+
                     return new DatabaseTestEnvironment
                     {
                         VectorStore = new OpenSearchVectorStore(new OpenSearchVectorDatabaseOptions
                         {
-                            ConnectionUri = new Uri($"http://localhost:{port2}"),
+                            ConnectionUri = new Uri($"http://localhost:{port}"),
                             Username = "admin",
                             Password = password,
                         }),
                         Container = container,
-                        Port = port2,
+                        Port = port,
                     };
                 }
             default:
