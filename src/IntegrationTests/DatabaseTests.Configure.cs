@@ -46,7 +46,7 @@ public partial class DatabaseTests
                     var port1 = Random.Shared.Next(49152, 65535);
                     var port2 = Random.Shared.Next(49152, 65535);
                     var container = new ContainerBuilder()
-                        .WithImage("opensearchproject/opensearch:latest")
+                        .WithImage("opensearchproject/opensearch:2.19.4")
                         .WithPortBinding(hostPort: port1, containerPort: 9600)
                         .WithPortBinding(hostPort: port2, containerPort: 9200)
                         .WithEnvironment("discovery.type", "single-node")
