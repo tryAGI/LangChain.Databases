@@ -1,7 +1,7 @@
 using DotNet.Testcontainers.Builders;
 using LangChain.Databases.OpenSearch;
 using LangChain.Databases.Postgres;
-using Microsoft.SemanticKernel.Connectors.InMemory;
+using CommunityToolkit.VectorData.InMemory;
 using Testcontainers.PostgreSql;
 
 namespace LangChain.Databases.IntegrationTests;

@@ -44,7 +44,9 @@ public class OpenSearchVectorStore : VectorStore
     public IOpenSearchClient Client => _client;
 
     /// <inheritdoc />
-    public override VectorStoreCollection<TKey, TRecord> GetCollection<TKey, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] TRecord>(
+    [RequiresUnreferencedCode("OpenSearch record mapping reflects over record properties.")]
+    [RequiresDynamicCode("OpenSearch record mapping creates record instances dynamically.")]
+    public override VectorStoreCollection<TKey, TRecord> GetCollection<TKey, TRecord>(
         string name,
         VectorStoreCollectionDefinition? definition = null)
     {
