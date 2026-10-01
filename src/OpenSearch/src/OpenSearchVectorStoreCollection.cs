@@ -11,7 +11,7 @@ namespace LangChain.Databases.OpenSearch;
 /// <summary>
 /// MEVA-compatible vector store collection backed by an OpenSearch index with k-NN.
 /// </summary>
-public class OpenSearchVectorStoreCollection<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] TRecord> :
+public class OpenSearchVectorStoreCollection<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] TRecord> :
     VectorStoreCollection<string, TRecord>
     where TRecord : class
 {
