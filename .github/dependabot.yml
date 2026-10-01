@@ -15,6 +15,9 @@ updates:
           - "*"
     ignore:
       - dependency-name: Microsoft.CodeAnalysis.CSharp
+      # InMemory 1.74.0-preview still requires VectorData 10.1.0 APIs.
+      - dependency-name: Microsoft.Extensions.VectorData.Abstractions
+        versions: [">= 10.2.0"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
