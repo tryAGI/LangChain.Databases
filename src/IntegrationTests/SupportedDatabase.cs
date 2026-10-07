@@ -8,4 +8,5 @@ public enum SupportedDatabase
     Postgres,
     Redis,
     Mongo,
+    Chroma,
 }
