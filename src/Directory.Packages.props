@@ -16,6 +16,7 @@
     <PackageVersion Include="Microsoft.Extensions.VectorData.Abstractions" Version="10.10.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
     <PackageVersion Include="CommunityToolkit.VectorData.InMemory" Version="1.0.1" />
+    <PackageVersion Include="CommunityToolkit.VectorData.Chroma" Version="1.0.0-preview" />
     <PackageVersion Include="MinVer" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
