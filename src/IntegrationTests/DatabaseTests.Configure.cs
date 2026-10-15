@@ -1,3 +1,5 @@
+using ChromaDB.Client;
+using CommunityToolkit.VectorData.Chroma;
 using DotNet.Testcontainers.Builders;
 using LangChain.Databases.OpenSearch;
 using LangChain.Databases.Postgres;
@@ -69,6 +71,28 @@ public partial class DatabaseTests
                             Username = "admin",
                             Password = password,
                         }),
+                        Container = container,
+                        Port = port,
+                    };
+                }
+            case SupportedDatabase.Chroma:
+                {
+                    var container = new ContainerBuilder()
+                        .WithImage("chromadb/chroma:1.5.9")
+                        .WithPortBinding(8000, assignRandomHostPort: true)
+                        .WithWaitStrategy(Wait.ForUnixContainer()
+                            .UntilHttpRequestIsSucceeded(r => r
+                                .ForPort(8000)
+                                .ForPath("/api/v2/heartbeat")))
+                        .Build();
+
+                    await container.StartAsync(cancellationToken);
+
+                    var port = container.GetMappedPublicPort(8000);
+
+                    return new DatabaseTestEnvironment
+                    {
+                        VectorStore = new ChromaVectorStore(new ChromaClient($"http://localhost:{port}"), ownsClient: true),
                         Container = container,
                         Port = port,
                     };

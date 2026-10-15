@@ -33,7 +33,7 @@ For backends with official Semantic Kernel connectors, use those packages direct
 |---|---|
 | In-Memory | `Microsoft.SemanticKernel.Connectors.InMemory` |
 | SQLite | `Microsoft.SemanticKernel.Connectors.Sqlite` |
-| Chroma | `Microsoft.SemanticKernel.Connectors.Chroma` |
+| Chroma | `CommunityToolkit.VectorData.Chroma` |
 | Qdrant | `Microsoft.SemanticKernel.Connectors.Qdrant` |
 | Pinecone | `Microsoft.SemanticKernel.Connectors.Pinecone` |
 | Weaviate | `Microsoft.SemanticKernel.Connectors.Weaviate` |
